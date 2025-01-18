@@ -11,8 +11,8 @@ boolean isSetUp = true;
 
 int dmxChannels = 512;
 ArrayList<Track> tracks = new ArrayList<Track>();
-ArrayList<MidiBus> midiIn = new ArrayList<MidiBus>();
-IntList midiInValues = new IntList();
+//ArrayList<MidiBus> midiIn = new ArrayList<MidiBus>();
+//IntList midiInValues = new IntList();
 
 void setup()
 {

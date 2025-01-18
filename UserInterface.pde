@@ -7,6 +7,9 @@ int trackSettingsHeight = 200;
 
 int padding = 10;
 
+DropdownList midiInList;
+DropdownList midiOutList;
+
 void UISetup()
 {
   fill(GetPalette(2));
@@ -32,11 +35,11 @@ void UISetup()
   cp5.addButton("TrackCreateDefault")
     .setValue(128)
     .setPosition(width/2, padding)
-    .setSize(25,25)
+    .setSize(25, 25)
     .setCaptionLabel("+")
     ;
 
-  MIDIinputs = cp5.addDropdownList("MIDIinputsList")
+  midiInList = MIDIinputs = cp5.addDropdownList("MIDIinputsList")
     .setPosition(width/2 + padding, topBarHeight + padding)
     ;
 
