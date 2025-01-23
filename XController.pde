@@ -3,7 +3,6 @@ import controlP5.*;
 
 //ControlP5 variables
 ControlP5 cp5;
-DropdownList MIDIinputs, MIDIoutputs;
 
 String address = "COM4";          //either port COM4 or IP
 
@@ -36,21 +35,36 @@ void setup()
 
   ConsolePrint("Welcome to XController by Oriol Colomer Delgado - @oriolonbass | 2025");
   MidiBus.list();
+  midiCreateBus(2, 5);
 }
 
 void draw()
 {
-  /*
+}
+
+
+public void ManageTrackData()
+{
+
+
   for (int i = 0; i<tracks.size(); i++)
+  {
+    tracks.get(i).trackUpdate();
+  }
+
+
+  /*
+ for (int i = 0; i<tracks.size(); i++)
    {
-   tracks.get(i).trackReceive();
+   //tracks.get(i).trackReceive();
+   }
+   
+   if (mousePressed)//if input detected -> send output
+   {
+   for (int i = 0; i<tracks.size(); i++)
+   {
+   tracks.get(i).trackSend();
+   }
    }
    */
-  if (mousePressed)//if input detected -> send output
-  {
-    for (int i = 0; i<tracks.size(); i++)
-    {
-      tracks.get(i).trackSend();
-    }
-  }
 }

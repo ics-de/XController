@@ -17,19 +17,25 @@ void dmxConnect()
 {
   if (!isSetUp)
   {
-    address = cp5.get(Textfield.class, "Address").getText();
-    ConsolePrint("Attempting DMX connection to address " + address + "...");
-    if (DMXPRO && sendDMX)
+    if (sendDMX)
     {
-      dmxOutput.setupDmxPro(address, DMXPRO_BAUDRATE); //DMXPRO_PORT
-      ConsolePrint("DMX USB Pro detected on port: " + address);
-    } else if (LANBOX && sendDMX) {
-      dmxOutput.setupLanbox(address); //LANBOX_IP
-      ConsolePrint("LANBOX detected on IP: " + address);
-    } else
-    {
+      address = cp5.get(Textfield.class, "Address").getText();
+      ConsolePrint("Attempting DMX connection to address " + address + "...");
+      if (DMXPRO)
+      {
+        dmxOutput.setupDmxPro(address, DMXPRO_BAUDRATE); //DMXPRO_PORT
+        ConsolePrint("DMX USB Pro detected on port: " + address);
+      } else if (LANBOX) {
+        dmxOutput.setupLanbox(address); //LANBOX_IP
+        ConsolePrint("LANBOX detected on IP: " + address);
+      } else
+      {
+        delay(1000);
+        ConsolePrint("DMX connection failed");
+      }
+    }else{
       delay(1000);
-      ConsolePrint("DMX connection failed");
+        ConsolePrint("DMX connection not enabled");
     }
   }
 }

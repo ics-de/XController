@@ -5,10 +5,13 @@ int trackWidth = 100;
 int trackSliderWidth = 20;
 int trackSettingsHeight = 200;
 
+int settingsHeight = 20;
+
 int padding = 10;
 
 DropdownList midiInList;
 DropdownList midiOutList;
+
 
 void UISetup()
 {
@@ -39,7 +42,7 @@ void UISetup()
     .setCaptionLabel("+")
     ;
 
-  midiInList = MIDIinputs = cp5.addDropdownList("MIDIinputsList")
+  midiInList = cp5.addDropdownList("midiIn")
     .setPosition(width/2 + padding, topBarHeight + padding)
     ;
 
@@ -60,8 +63,24 @@ void UIAddTrack(int trackIndex)
     .setValue(currentTrack.trackValue)
     .setCaptionLabel(str(trackIndex))
     ;
-}
 
-void slider(float theColor) {
-  println("a slider event. setting background to "+theColor);
+int settingsHeightPos = height-topBarHeight-consoleHeight-6*settingsHeight;
+
+  cp5.addTextfield("In" + trackIndex)
+    .setPosition(position+padding, settingsHeightPos+padding)
+    .setSize(trackWidth-padding*2, settingsHeight)
+    .setText(str(currentTrack.trackInput))
+    .setFocus(false)
+    .setCaptionLabel("In")
+    .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+    ;
+
+  cp5.addTextfield("Out" + trackIndex)
+    .setPosition(position+padding, settingsHeightPos+2*settingsHeight+padding)
+    .setSize(trackWidth-padding*2, settingsHeight)
+    .setText(str(currentTrack.trackOutput))
+    .setFocus(false)
+    .setCaptionLabel("Out")
+    .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+    ;
 }
