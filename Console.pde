@@ -1,9 +1,9 @@
-String lastConsoleMessage = "";
+String lastConsoleMessage = " ";
 
 void ConsolePrint(String message)
 {
   println(message);
-  fill(GetPalette(2));
+  fill(GetPalette(0));
   rect(0, height - consoleHeight, width, consoleHeight);
   fill(GetPalette(3));
   text(message, 5, height - 5);

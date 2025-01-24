@@ -17,6 +17,7 @@ void dmxConnect()
 {
   if (!isSetUp)
   {
+    sendDMX = true;
     if (sendDMX)
     {
       address = cp5.get(Textfield.class, "Address").getText();

@@ -28,20 +28,27 @@ class Track {
   void trackSend()
   {
     dmxOutput.set(trackOutput, trackValue);
-    ConsolePrint("sending " + trackValue + " to channel " + trackOutput);
+    //ConsolePrint("sending " + trackValue + " to channel " + trackOutput);
   }
-  
+
   void trackUpdate()
   {
-    trackInput = int(cp5.get(Textfield.class, "In"+trackIndex).getText());
-    trackOutput = int(cp5.get(Textfield.class, "Out"+trackIndex).getText());
+    trackInput = int(cp5.get(Numberbox.class, "In"+trackIndex).getValue());
+    trackOutput = int(cp5.get(Numberbox.class, "Out"+trackIndex).getValue());
   }
 }
 
 public void TrackCreateDefault()
 {
+  UpdateTracks();
   int tIndex = tracks.size();
-  TrackCreate(0, 0, 255, tIndex, tIndex, tIndex);
+  if (tIndex == 0)
+  {
+    TrackCreate(0, 0, 255, tIndex, tIndex, tIndex);
+  } else
+  {
+    TrackCreate(0, 0, 255, tracks.get(tIndex-1).trackInput + 1, tracks.get(tIndex-1).trackOutput + 1, tIndex);
+  }
 }
 
 void TrackCreate(int tValue, int tRangeMin, int tRangeMax, int tInput, int tOutput, int tIndex)
@@ -55,24 +62,33 @@ void TrackCreate(int tValue, int tRangeMin, int tRangeMax, int tInput, int tOutp
 
 int TrackFind(int tInput)
 {
-  
-  int index = 0;  //Setting it to -1 creates errors with MidiBus
-  for(int i = 0; i < tracks.size(); i++)
+
+  int index = -1;  //Setting it to -1 creates errors with MidiBus
+  for (int i = 0; i < tracks.size(); i++)
   {
     tracks.get(i).trackUpdate();
     tracks.get(i).trackIndex = i;
-    println(tracks.get(i).trackInput + " == " + tInput);
-    if(tracks.get(i).trackInput == tInput)
+    //println(tracks.get(i).trackInput + " == " + tInput);
+    if (tracks.get(i).trackInput == tInput)
     {
       index = i;
     }
-    
   }
-  
-  if(index == -1)
+
+  if (index == -1)
   {
-    ConsolePrint("Track " + tInput + " not found.");
+    //ConsolePrint("Track " + tInput + " not found.");
   }
-  
+
   return index;
+}
+
+void UpdateTracks()
+{
+
+
+  for (int i = 0; i<tracks.size(); i++)
+  {
+    tracks.get(i).trackUpdate();
+  }
 }

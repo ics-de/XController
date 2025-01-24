@@ -5,23 +5,25 @@ int trackWidth = 100;
 int trackSliderWidth = 20;
 int trackSettingsHeight = 200;
 
+
 int settingsHeight = 20;
 
 int padding = 10;
 
-DropdownList midiInList;
-DropdownList midiOutList;
+DropdownList uiMidiInList;
+//DropdownList uiMidiOutList;
 
 
 void UISetup()
 {
-  fill(GetPalette(2));
-  rect(0, topBarHeight, width/2, height-topBarHeight-consoleHeight);
+  fill(GetPalette(0));
+  rect(0, topBarHeight, width, height-topBarHeight-consoleHeight);
 
   cp5.addButton("dmxConnect")
     .setValue(0)
     .setPosition(210+padding, padding)
     .setSize(150, topBarHeight-padding*3)
+    .setColor(paletteButton)
     //.setFont(font)
     ;
 
@@ -37,14 +39,16 @@ void UISetup()
 
   cp5.addButton("TrackCreateDefault")
     .setValue(128)
-    .setPosition(width/2, padding)
-    .setSize(25, 25)
+    .setPosition(width-topBarHeight+padding, padding)
+    .setSize(topBarHeight-2*padding, topBarHeight-2*padding)
+    .setColor(paletteButton)
     .setCaptionLabel("+")
     ;
 
-  midiInList = cp5.addDropdownList("midiIn")
-    .setPosition(width/2 + padding, topBarHeight + padding)
+  uiMidiInList = cp5.addDropdownList("MidiInputs")
+    .setPosition(width/2 + padding, padding)
     ;
+  UISetUpDropdownList(uiMidiInList);
 
 
   isSetUp = false;
@@ -61,26 +65,44 @@ void UIAddTrack(int trackIndex)
     .setSize(trackSliderWidth, height-topBarHeight-consoleHeight-trackSettingsHeight-(padding*2))
     .setRange(currentTrack.trackRangeMin, currentTrack.trackRangeMax)
     .setValue(currentTrack.trackValue)
+    .setDecimalPrecision(0)
     .setCaptionLabel(str(trackIndex))
     ;
 
-int settingsHeightPos = height-topBarHeight-consoleHeight-6*settingsHeight;
+  int settingsHeightPos = height-topBarHeight-consoleHeight-6*settingsHeight;
 
-  cp5.addTextfield("In" + trackIndex)
+  cp5.addNumberbox("In" + trackIndex)
     .setPosition(position+padding, settingsHeightPos+padding)
     .setSize(trackWidth-padding*2, settingsHeight)
-    .setText(str(currentTrack.trackInput))
-    .setFocus(false)
+    .setValue(currentTrack.trackInput)
+    .setRange(currentTrack.trackRangeMin, currentTrack.trackRangeMax)
+    .setDecimalPrecision(0)
+    .setDirection(Controller.HORIZONTAL)
+    .setScrollSensitivity(1)
     .setCaptionLabel("In")
-    .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+    .getCaptionLabel().align (ControlP5.CENTER, ControlP5.CENTER)
+    //.onChange(tracks.get(trackIndex).trackUpdate())
     ;
 
-  cp5.addTextfield("Out" + trackIndex)
+  cp5.addNumberbox("Out" + trackIndex)
     .setPosition(position+padding, settingsHeightPos+2*settingsHeight+padding)
     .setSize(trackWidth-padding*2, settingsHeight)
-    .setText(str(currentTrack.trackOutput))
-    .setFocus(false)
+    .setValue(currentTrack.trackOutput)
+    .setRange(currentTrack.trackRangeMin, currentTrack.trackRangeMax)
+    .setDecimalPrecision(0)
+    .setDirection(Controller.HORIZONTAL)
+    .setScrollSensitivity(1)
     .setCaptionLabel("Out")
     .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
     ;
+}
+
+void UISetUpDropdownList(DropdownList dropdownList) {
+  for (int i=0; i<midiInList.size(); i++) {
+    dropdownList.addItem(midiInList.get(i).inputName, midiInList.get(i).inputIndex);
+  }
+}
+
+void MidiInputs(){
+  midiCreateBus();
 }

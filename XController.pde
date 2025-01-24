@@ -27,15 +27,15 @@ void setup()
 
   SetPalette();
 
-  background(GetPalette(0));
+  background(GetPalette(2));
   //PFont font = createFont("arial",12);
 
-
+  MidiSetup();
   UISetup();
 
   ConsolePrint("Welcome to XController by Oriol Colomer Delgado - @oriolonbass | 2025");
   MidiBus.list();
-  midiCreateBus(2, 5);
+  //midiCreateBus(2, 5);
 }
 
 void draw()
@@ -43,28 +43,10 @@ void draw()
 }
 
 
-public void ManageTrackData()
-{
-
-
-  for (int i = 0; i<tracks.size(); i++)
-  {
-    tracks.get(i).trackUpdate();
+void dispose() {
+  ConsolePrint("Disposing resources...");
+  // Clean up ControlP5 or other libraries
+  if (cp5 != null) {
+    cp5.hide(); // Example cleanup
   }
-
-
-  /*
- for (int i = 0; i<tracks.size(); i++)
-   {
-   //tracks.get(i).trackReceive();
-   }
-   
-   if (mousePressed)//if input detected -> send output
-   {
-   for (int i = 0; i<tracks.size(); i++)
-   {
-   tracks.get(i).trackSend();
-   }
-   }
-   */
 }
