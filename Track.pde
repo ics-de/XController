@@ -38,6 +38,16 @@ class Track {
   }
 }
 
+
+void TrackCreate(int tValue, int tRangeMin, int tRangeMax, int tInput, int tOutput, int tIndex)
+{
+  int trackIndex = tracks.size();
+
+  tracks.add(new Track(tValue, tRangeMin, tRangeMax, tInput, tOutput, tIndex));
+
+  UIAddTrack(trackIndex);
+}
+
 //default method for creating new tracks, mapped to the [+] button
 public void TrackCreateDefault()
 {
@@ -52,17 +62,21 @@ public void TrackCreateDefault()
   }
 }
 
-void TrackCreate(int tValue, int tRangeMin, int tRangeMax, int tInput, int tOutput, int tIndex)
+
+public void TrackRemove(int tIndex)
 {
-  int trackIndex = tracks.size();
-
-  tracks.add(new Track(tValue, tRangeMin, tRangeMax, tInput, tOutput, tIndex));
-
-  UIAddTrack(trackIndex);
+  tracks.remove(tIndex);
+  cp5.remove("Track"+tIndex);
+  cp5.remove("In"+tIndex);
+  cp5.remove("Out"+tIndex);
+  cp5.remove("Remove"+tIndex);
+  
+  fill(GetPalette(0));
+  rect(trackWidth*tIndex, topBarHeight, trackWidth, height-topBarHeight-consoleHeight);
 }
 
 
-//[LEGACY] find the track with the matching trackInput and return its index in tracks
+/*[LEGACY] find the track with the matching trackInput and return its index in tracks
 int TrackFind(int tInput)
 {
 
@@ -85,7 +99,7 @@ int TrackFind(int tInput)
 
   return index;
 }
-//[LEGACY]
+*/
 
 
 //find all tracks with the same trackInput and return them as an IntList
