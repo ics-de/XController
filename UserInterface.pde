@@ -58,7 +58,8 @@ void UIAddTrack(int trackIndex)
 {
   Track currentTrack = tracks.get(trackIndex);
   int position = trackWidth*trackIndex;
-  fill(127);
+  stroke(GetPalette(0));
+  fill(GetPalette(3));
   rect(position, topBarHeight, trackWidth, height-topBarHeight-consoleHeight);
   cp5.addSlider("Track" + trackIndex)
     .setPosition(position+trackWidth/2-trackSliderWidth/2, topBarHeight+padding)
@@ -103,6 +104,7 @@ void UISetUpDropdownList(DropdownList dropdownList) {
   }
 }
 
-void MidiInputs(){
+//create a new MidiBus with the specified input in the MidiInput dropdown list
+void MidiInputs() {
   midiCreateBus();
 }

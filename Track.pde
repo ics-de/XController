@@ -38,6 +38,7 @@ class Track {
   }
 }
 
+//default method for creating new tracks, mapped to the [+] button
 public void TrackCreateDefault()
 {
   UpdateTracks();
@@ -60,6 +61,8 @@ void TrackCreate(int tValue, int tRangeMin, int tRangeMax, int tInput, int tOutp
   UIAddTrack(trackIndex);
 }
 
+
+//[LEGACY] find the track with the matching trackInput and return its index in tracks
 int TrackFind(int tInput)
 {
 
@@ -82,11 +85,28 @@ int TrackFind(int tInput)
 
   return index;
 }
+//[LEGACY]
+
+
+//find all tracks with the same trackInput and return them as an IntList
+IntList TrackFindAll(int tInput)
+{
+
+  IntList indexes = new IntList();
+  for (int i = 0; i < tracks.size(); i++)
+  {
+    tracks.get(i).trackUpdate();
+    tracks.get(i).trackIndex = i;
+    if (tracks.get(i).trackInput == tInput)
+    {
+      indexes.append(i);
+    }
+  }
+  return indexes;
+}
 
 void UpdateTracks()
 {
-
-
   for (int i = 0; i<tracks.size(); i++)
   {
     tracks.get(i).trackUpdate();

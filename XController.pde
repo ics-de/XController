@@ -10,8 +10,6 @@ boolean isSetUp = true;
 
 int dmxChannels = 512;
 ArrayList<Track> tracks = new ArrayList<Track>();
-//ArrayList<MidiBus> midiIn = new ArrayList<MidiBus>();
-//IntList midiInValues = new IntList();
 
 void setup()
 {
@@ -40,8 +38,8 @@ void setup()
 
 void draw()
 {
+  
 }
-
 
 void dispose() {
   ConsolePrint("Disposing resources...");

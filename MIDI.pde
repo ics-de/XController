@@ -29,12 +29,12 @@ void midiCreateBus(/*int midiIn, int midiOut*/)
   //midiBus = new MidiBus(this, midiIn, midiOut);
   int selectedInput = int(uiMidiInList.getValue());
   int selectedOutput = 0;
-  
-  midiBus = new MidiBus(this,selectedInput, selectedOutput);
+
+  midiBus = new MidiBus(this, selectedInput, selectedOutput);
 }
 
-void DebugMidi(){
- println(str(uiMidiInList.getValue())); 
+void DebugMidi() {
+  println(str(uiMidiInList.getValue()));
 }
 
 void controllerChange(int channel, int number, int value) {
@@ -58,13 +58,18 @@ void MidiControllerChange(int channel, int number, int value)
     value = round(map(value, 0, 127, 0, 255));
   }
 
-  int trackIndex = TrackFind(number);
-  if (trackIndex > -1)
+  //int trackIndex = TrackFind(number);
+  IntList trackIndexes = TrackFindAll(number);      //get all tracks with their In set to the CC number
+  if (trackIndexes.size() > 0)
   {
-    tracks.get(trackIndex).trackReceive(value);
-    tracks.get(trackIndex).trackSend();
-    cp5.get(Slider.class, "Track" + trackIndex).setValue(value);
-  } else {
+    for (int i = 0; i < trackIndexes.size(); i++)   //foreach track with the same In, assign and send this same value
+    {
+      tracks.get(trackIndexes.get(i)).trackReceive(value);
+      tracks.get(trackIndexes.get(i)).trackSend();
+      cp5.get(Slider.class, "Track" + trackIndexes.get(i)).setValue(value);
+    }
+  } else
+  {
     println("Track not found");
     //ConsolePrint("Track " + " not found.");
   }
