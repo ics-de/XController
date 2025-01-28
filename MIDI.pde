@@ -66,7 +66,6 @@ void MidiControllerChange(int channel, int number, int value)
     {
       tracks.get(trackIndexes.get(i)).trackReceive(value);
       tracks.get(trackIndexes.get(i)).trackSend();
-      cp5.get(Slider.class, "Track" + trackIndexes.get(i)).setValue(value);
     }
   } else
   {

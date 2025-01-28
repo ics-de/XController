@@ -98,6 +98,27 @@ void UISetup()
   isSetUp = false;
 }
 
+void UIRefresh()
+{
+  background(GetPalette(2));
+
+  fill(GetPalette(0));
+  rect(0, topBarHeight, width, height-topBarHeight-consoleHeight);
+
+  for (int i = 0; i < tracks.size(); i++)
+  {
+    stroke(GetPalette(0));
+    if (!tracks.get(i).isMuted) {
+      fill(GetPalette(3));
+    } else {
+      fill(GetPalette(5));
+    }
+
+    rect(trackWidth*i, topBarHeight, trackWidth, height-topBarHeight-consoleHeight);
+  }
+  UIConsole();
+}
+
 void UIAddTrack(int trackIndex)
 {
   Track currentTrack = tracks.get(trackIndex);
@@ -125,6 +146,7 @@ void UIAddTrack(int trackIndex)
     settingsLabelOut = "";
   }
 
+  //SETTINGS
   cp5.addNumberbox("In" + trackIndex)
     .setPosition(position+padding, settingsHeightPos+padding)
     .setSize(settingWidthSize, settingsHeight)
@@ -139,7 +161,7 @@ void UIAddTrack(int trackIndex)
     ;
 
   cp5.addNumberbox("Out" + trackIndex)
-    .setPosition(position+padding, settingsHeightPos+2*settingsHeight+padding)
+    .setPosition(position+padding, settingsHeightPos+settingsHeight+2*padding)
     .setSize(settingWidthSize, settingsHeight)
     .setValue(currentTrack.trackOutput)
     .setRange(currentTrack.trackRangeMin, currentTrack.trackRangeMax)
@@ -149,9 +171,27 @@ void UIAddTrack(int trackIndex)
     .setCaptionLabel(settingsLabelOut)
     .getCaptionLabel().align(ControlP5.RIGHT, ControlP5.CENTER)
     ;
+
+  cp5.addToggle("Mute" + trackIndex)
+    .setValue(false)
+    .setPosition(position+padding, settingsHeightPos+2*settingsHeight+3*padding)
+    .setSize(settingWidthSize, settingsHeight)
+    //.setColor(paletteButton)
+    .setCaptionLabel("M")
+    .addCallback(new CallbackListener() {
+    public void controlEvent(CallbackEvent event) {
+      if (event.getAction() == ControlP5.ACTION_RELEASED) {
+        TrackMute(trackIndex);
+      }
+    }
+  }
+  )
+
+  .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+    ;
+
 /*
   cp5.addButton("Remove" + trackIndex)
-    .setValue(128)
     .setPosition(position+trackWidth-buttonSmallSize/2-padding, topBarHeight+padding)
     .setSize(buttonSmallSize/2, buttonSmallSize/2)
     .setColor(paletteButton)
@@ -171,6 +211,16 @@ void UISetUpDropdownList(DropdownList dropdownList) {
   for (int i=0; i<midiInList.size(); i++) {
     dropdownList.addItem(midiInList.get(i).inputName, midiInList.get(i).inputIndex);
   }
+}
+
+void UIConsole()
+{
+  fill(GetPalette(0));
+  rect(0, height - consoleHeight, width, consoleHeight);
+  fill(GetPalette(4));
+  text(currentConsoleMessage, 5, height - 5);
+  fill(GetPalette(4), 127);
+  text(lastConsoleMessage, 5, height - 20);
 }
 
 //create a new MidiBus with the specified input in the MidiInput dropdown list

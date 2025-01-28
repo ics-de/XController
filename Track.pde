@@ -4,31 +4,42 @@ class Track {
   int trackRangeMin = 0;
   int trackRangeMax = 255;
 
+  int trackIndex = 0;
+
+  //Track Settings
   int trackInput = 0;
   int trackOutput = 0;
-
-  int trackIndex = 0;
+  boolean isMuted = false;
 
   Track (int tValue, int tRangeMin, int tRangeMax, int tInput, int tOutput, int tIndex) {
     trackValue = tValue;
     trackRangeMin = tRangeMin;
     trackRangeMax = tRangeMax;
+    
+    trackIndex = tIndex;
+    
     trackInput = tInput;
     trackOutput = tOutput;
-    trackIndex = tIndex;
+    isMuted = false;
   }
 
   void trackReceive(int tValue)
   {
-    //trackValue = midiIn.get(trackInput);
-    //ConsolePrint("sending " + trackValue + "to channel " + trackOutput);
+    if(!isMuted)
+    {
     trackValue = constrain(tValue, trackRangeMin, trackRangeMax);
+    //ConsolePrint("sending " + trackValue + "to channel " + trackOutput);
+    }
   }
 
   void trackSend()
   {
-    dmxOutput.set(trackOutput, trackValue);
+    if(!isMuted)
+    {
+      cp5.get(Slider.class, "Track" + trackIndex).setValue(trackValue);
+      dmxOutput.set(trackOutput, trackValue);
     //ConsolePrint("sending " + trackValue + " to channel " + trackOutput);
+    }
   }
 
   void trackUpdate()
@@ -75,6 +86,10 @@ public void TrackRemove(int tIndex)
   rect(trackWidth*tIndex, topBarHeight, trackWidth, height-topBarHeight-consoleHeight);
 }
 
+public void TrackMute(int tIndex)
+{
+  tracks.get(tIndex).isMuted = !tracks.get(tIndex).isMuted;
+}
 
 /*[LEGACY] find the track with the matching trackInput and return its index in tracks
 int TrackFind(int tInput)

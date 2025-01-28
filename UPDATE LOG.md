@@ -1,3 +1,9 @@
+## v 0.7		28/01/2025
+-fixed UI overdraw bug with UIRefresh()
+-added track muting
+-address is now saved in saved patches
+-moved console's draw functions to UserInterface
+
 ## v 0.6 		26/01/2025
 -flipped this log's order for easier reading
 -added save/load functionality (restart is recommended before loading)

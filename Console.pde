@@ -1,16 +1,12 @@
-String lastConsoleMessage = " ";
+String lastConsoleMessage = "";
+String currentConsoleMessage = "";
 
 void ConsolePrint(String message)
 {
+  lastConsoleMessage = currentConsoleMessage;
+  currentConsoleMessage = message;
   println(message);
-  fill(GetPalette(0));
-  rect(0, height - consoleHeight, width, consoleHeight);
-  fill(GetPalette(4));
-  text(message, 5, height - 5);
-  fill(GetPalette(4), 127);
-  text(lastConsoleMessage, 5, height - 20);
-
-  lastConsoleMessage = message;
+  
 }
 
 void ConsoleClear()

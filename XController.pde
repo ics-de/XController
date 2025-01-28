@@ -38,7 +38,7 @@ void setup()
 
 void draw()
 {
-  
+  UIRefresh();
 }
 
 void dispose() {
