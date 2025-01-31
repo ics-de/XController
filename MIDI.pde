@@ -7,6 +7,8 @@ ArrayList<MidiInOut> midiOutList = new ArrayList<MidiInOut>();
 
 boolean scaleMidiToDmx = true;
 
+boolean isReceivingMidi = false;
+
 class MidiInOut {
 
   int inputIndex = 0;
@@ -45,6 +47,8 @@ void controllerChange(int channel, int number, int value) {
 
 void MidiControllerChange(int channel, int number, int value)
 {
+  isReceivingMidi = true;
+  
   println();
   println("Controller Change:");
   println("--------");
@@ -64,7 +68,17 @@ void MidiControllerChange(int channel, int number, int value)
   {
     for (int i = 0; i < trackIndexes.size(); i++)   //foreach track with the same In, assign and send this same value
     {
-      tracks.get(trackIndexes.get(i)).trackReceive(value);
+      int trackValue = tracks.get(trackIndexes.get(i)).trackValue;
+      int newValue = 0;
+
+      if (tracks.get(trackIndexes.get(i)).isSmoothed)
+      {
+        newValue = ceil(lerp(value, trackValue, 0.1f));
+      } else {
+        newValue = value;
+      }
+
+      tracks.get(trackIndexes.get(i)).trackReceive(newValue);
       tracks.get(trackIndexes.get(i)).trackSend();
     }
   } else

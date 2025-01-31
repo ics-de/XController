@@ -31,7 +31,7 @@ void setup()
   MidiSetup();
   UISetup();
 
-  ConsolePrint("Welcome to XController by Oriol Colomer Delgado - @oriolonbass | 2025");
+  ConsolePrint("Welcome to XController by Oriol Colomer Delgado - @ics_de | 2025");
   MidiBus.list();
   //midiCreateBus(2, 5);
 }

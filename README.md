@@ -1,12 +1,17 @@
 # XController
-DMX connection user interface app. Created using Processing
+DMX connection user interface app. Created using Processing.
 
+![general view](https://github.com/ics-de/XController/blob/main/media/general_view.png)
 
-# Libraries
+## Documentation
+Check out the [wiki](https://github.com/ics-de/XController/wiki) for documentation and guides.
+
+## Libraries
 The app uses the following Processing libraries: <br>
-	-DMXP512 <br>
-	-Control p5 <br>
-	-MIDIBus with the following fix: https://github.com/micycle1/themidibus/releases/tag/p4 <br>
+	* DMXP512 <br>
+	* Control p5 <br>
+	* MIDIBus<br>
 
+Read the [wiki article on libraries](https://github.com/ics-de/XController/wiki/Libraries) for more info on them.
 
-Oriol Colomer Delgado, 2025
+Oriol Colomer Delgado @ics_de, 2025

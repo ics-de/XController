@@ -1,8 +1,19 @@
+# UPDATE LOG
+
+## v 0.8		31/01/2025
+-track slider's value is now properly sent to the track's output channel
+-added value smoothing. there's still fixes for it to properly work with constant MIDI updates
+-added track soloing
+-added UI indicator to show the user the software is receiving MIDI data
+-to do: add automatic functions
+
+
 ## v 0.7		28/01/2025
 -fixed UI overdraw bug with UIRefresh()
 -added track muting
 -address is now saved in saved patches
 -moved console's draw functions to UserInterface
+
 
 ## v 0.6 		26/01/2025
 -flipped this log's order for easier reading
@@ -40,7 +51,7 @@
 -created Palette for easier color management
 
 
-## v 0.1			14/01/2025
+## v 0.1		14/01/2025
 -started project
 -integrated DMX connection, DMX interface selection and DMX output
 -added Console functionality

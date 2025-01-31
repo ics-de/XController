@@ -57,6 +57,8 @@ void UISetup()
     ;
   UISetUpDropdownList(uiMidiInList);
 
+  fill(0);
+  rect(width/2, padding, 5, 5);
 
   cp5.addTextfield("SaveLoadPatch")    //Used for both IP and COM Port
     .setPosition(padding+300+2*padding, padding)
@@ -105,6 +107,13 @@ void UIRefresh()
   fill(GetPalette(0));
   rect(0, topBarHeight, width, height-topBarHeight-consoleHeight);
 
+  if (isReceivingMidi) {
+    fill(0, 255, 0);
+  } else {
+    fill(0);
+  }
+  rect(width/2, padding, 5, 5);
+
   for (int i = 0; i < tracks.size(); i++)
   {
     stroke(GetPalette(0));
@@ -126,6 +135,7 @@ void UIAddTrack(int trackIndex)
   stroke(GetPalette(0));
   fill(GetPalette(3));
   rect(position, topBarHeight, trackWidth, height-topBarHeight-consoleHeight);
+  
   cp5.addSlider("Track" + trackIndex)
     .setPosition(position+trackWidth/2-trackSliderWidth/2, topBarHeight+padding)
     .setSize(trackSliderWidth, height-topBarHeight-consoleHeight-trackSettingsHeight-(padding*2))
@@ -133,6 +143,15 @@ void UIAddTrack(int trackIndex)
     .setValue(currentTrack.trackValue)
     .setDecimalPrecision(0)
     .setCaptionLabel(str(trackIndex))
+    .addCallback(new CallbackListener() {
+    public void controlEvent(CallbackEvent event) {
+      if (event.getAction() == ControlP5.ACTION_BROADCAST) {
+        tracks.get(trackIndex).trackReceive((int)(event.getController().getValue()));
+        tracks.get(trackIndex).trackSend();
+      }
+    }
+  }
+  )
     ;
 
   int settingsHeightPos = height-topBarHeight-consoleHeight-6*settingsHeight;
@@ -175,7 +194,7 @@ void UIAddTrack(int trackIndex)
   cp5.addToggle("Mute" + trackIndex)
     .setValue(false)
     .setPosition(position+padding, settingsHeightPos+2*settingsHeight+3*padding)
-    .setSize(settingWidthSize, settingsHeight)
+    .setSize(settingWidthSize/2, settingsHeight)
     //.setColor(paletteButton)
     .setCaptionLabel("M")
     .addCallback(new CallbackListener() {
@@ -190,21 +209,57 @@ void UIAddTrack(int trackIndex)
   .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
     ;
 
-/*
-  cp5.addButton("Remove" + trackIndex)
-    .setPosition(position+trackWidth-buttonSmallSize/2-padding, topBarHeight+padding)
-    .setSize(buttonSmallSize/2, buttonSmallSize/2)
-    .setColor(paletteButton)
-    .setCaptionLabel("x")
+  cp5.addToggle("Solo" + trackIndex)
+    .setValue(false)
+    .setPosition(position+padding+settingWidthSize/2, settingsHeightPos+2*settingsHeight+3*padding)
+    .setSize(settingWidthSize/2, settingsHeight)
+    //.setColor(paletteButton)
+    .setCaptionLabel("S")
     .addCallback(new CallbackListener() {
     public void controlEvent(CallbackEvent event) {
       if (event.getAction() == ControlP5.ACTION_RELEASED) {
-        TrackRemove(trackIndex);
+        TrackSolo(trackIndex);
       }
     }
   }
-  );
-  */
+  )
+
+  .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+    ;
+
+  cp5.addToggle("Smooth" + trackIndex)
+    .setValue(false)
+    .setPosition(position+padding, settingsHeightPos+3*settingsHeight+4*padding)
+    .setSize(settingWidthSize, settingsHeight)
+    //.setColor(paletteButton)
+    .setCaptionLabel("Smooth")
+    .addCallback(new CallbackListener() {
+    public void controlEvent(CallbackEvent event) {
+      if (event.getAction() == ControlP5.ACTION_RELEASED) {
+        TrackSmooth(trackIndex);
+      }
+    }
+  }
+  )
+
+  .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+    ;
+
+  /*
+  cp5.addButton("Remove" + trackIndex)
+   .setPosition(position+trackWidth-buttonSmallSize/2-padding, topBarHeight+padding)
+   .setSize(buttonSmallSize/2, buttonSmallSize/2)
+   .setColor(paletteButton)
+   .setCaptionLabel("x")
+   .addCallback(new CallbackListener() {
+   public void controlEvent(CallbackEvent event) {
+   if (event.getAction() == ControlP5.ACTION_RELEASED) {
+   TrackRemove(trackIndex);
+   }
+   }
+   }
+   );
+   */
 }
 
 void UISetUpDropdownList(DropdownList dropdownList) {

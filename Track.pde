@@ -1,4 +1,3 @@
-
 class Track {
   int trackValue = 127;
   int trackRangeMin = 0;
@@ -10,35 +9,37 @@ class Track {
   int trackInput = 0;
   int trackOutput = 0;
   boolean isMuted = false;
+  boolean isSmoothed = false;
 
   Track (int tValue, int tRangeMin, int tRangeMax, int tInput, int tOutput, int tIndex) {
     trackValue = tValue;
     trackRangeMin = tRangeMin;
     trackRangeMax = tRangeMax;
-    
+
     trackIndex = tIndex;
-    
+
     trackInput = tInput;
     trackOutput = tOutput;
     isMuted = false;
+    isSmoothed = false;
   }
 
   void trackReceive(int tValue)
   {
-    if(!isMuted)
+    if (!isMuted)
     {
-    trackValue = constrain(tValue, trackRangeMin, trackRangeMax);
-    //ConsolePrint("sending " + trackValue + "to channel " + trackOutput);
+      trackValue = constrain(tValue, trackRangeMin, trackRangeMax);
+      //ConsolePrint("sending " + trackValue + "to channel " + trackOutput);
     }
   }
 
   void trackSend()
   {
-    if(!isMuted)
+    if (!isMuted)
     {
       cp5.get(Slider.class, "Track" + trackIndex).setValue(trackValue);
       dmxOutput.set(trackOutput, trackValue);
-    //ConsolePrint("sending " + trackValue + " to channel " + trackOutput);
+      //ConsolePrint("sending " + trackValue + " to channel " + trackOutput);
     }
   }
 
@@ -80,8 +81,11 @@ public void TrackRemove(int tIndex)
   cp5.remove("Track"+tIndex);
   cp5.remove("In"+tIndex);
   cp5.remove("Out"+tIndex);
+  cp5.remove("Mute"+tIndex);
+  cp5.remove("Solo"+tIndex);
+  cp5.remove("Smooth"+tIndex);
   cp5.remove("Remove"+tIndex);
-  
+
   fill(GetPalette(0));
   rect(trackWidth*tIndex, topBarHeight, trackWidth, height-topBarHeight-consoleHeight);
 }
@@ -89,32 +93,68 @@ public void TrackRemove(int tIndex)
 public void TrackMute(int tIndex)
 {
   tracks.get(tIndex).isMuted = !tracks.get(tIndex).isMuted;
+  if(tracks.get(tIndex).isMuted)
+  {
+    cp5.get(Toggle.class, "Solo"+tIndex).setState(false);
+  }else{
+   //TrackSolo(tIndex); 
+  }
+}
+
+public void TrackSolo(int tIndex)
+{
+  if (cp5.get(Toggle.class, "Solo"+tIndex).getState() == true)
+  {
+    for (int i = 0; i < tracks.size(); i++)
+    {
+      if (i != tIndex)
+      {
+        tracks.get(i).isMuted = true;
+        cp5.get(Toggle.class, "Mute"+i).setValue(true);
+        cp5.get(Toggle.class, "Solo"+i).setValue(false);
+      }
+    }
+    tracks.get(tIndex).isMuted = false;
+    cp5.get(Toggle.class, "Mute"+tIndex).setValue(false);
+  } else {
+    for (int i = 0; i < tracks.size(); i++)
+    {
+      tracks.get(i).isMuted = false;
+      cp5.get(Toggle.class, "Mute"+i).setValue(false);
+      cp5.get(Toggle.class, "Solo"+i).setValue(false);
+    }
+  }
+}
+
+public void TrackSmooth(int tIndex)
+{
+  tracks.get(tIndex).isSmoothed = !tracks.get(tIndex).isSmoothed;
 }
 
 /*[LEGACY] find the track with the matching trackInput and return its index in tracks
-int TrackFind(int tInput)
-{
-
-  int index = -1;  //Setting it to -1 creates errors with MidiBus
-  for (int i = 0; i < tracks.size(); i++)
-  {
-    tracks.get(i).trackUpdate();
-    tracks.get(i).trackIndex = i;
-    //println(tracks.get(i).trackInput + " == " + tInput);
-    if (tracks.get(i).trackInput == tInput)
-    {
-      index = i;
-    }
-  }
-
-  if (index == -1)
-  {
-    //ConsolePrint("Track " + tInput + " not found.");
-  }
-
-  return index;
-}
-*/
+ int TrackFind(int tInput)
+ {
+ 
+ int index = -1;  //Setting it to -1 creates errors with MidiBus
+ for (int i = 0; i < tracks.size(); i++)
+ {
+ tracks.get(i).trackUpdate();
+ tracks.get(i).trackIndex = i;
+ //println(tracks.get(i).trackInput + " == " + tInput);
+ if (tracks.get(i).trackInput == tInput)
+ {
+ index = i;
+ }
+ }
+ 
+ if (index == -1)
+ {
+ //ConsolePrint("Track " + tInput + " not found.");
+ }
+ 
+ return index;
+ }
+ */
 
 
 //find all tracks with the same trackInput and return them as an IntList
