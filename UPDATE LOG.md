@@ -5,6 +5,7 @@
 * cleaned up how trackReceive() works
 * Improved MIDI input feedback in UI
 * started implementation of TrackType (that being either MIDI CC, MIDI Note, Audio or by Math function)
+-added "default.csv" patch
 
 ### To Do List
 * to do: add an AudioInput dropdown list next to the MidiInput one
