@@ -33,12 +33,19 @@ void setup()
 
   ConsolePrint("Welcome to XController by Oriol Colomer Delgado - @ics_de | 2025");
   MidiBus.list();
+  Sound.list();
   //midiCreateBus(2, 5);
+  //Load("default");
 }
 
 void draw()
 {
   UIRefresh();
+  
+  if(useAudio)
+  {
+   AudioUpdate(); 
+  }
 }
 
 void dispose() {

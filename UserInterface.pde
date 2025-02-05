@@ -135,7 +135,7 @@ void UIAddTrack(int trackIndex)
   stroke(GetPalette(0));
   fill(GetPalette(3));
   rect(position, topBarHeight, trackWidth, height-topBarHeight-consoleHeight);
-  
+
   cp5.addSlider("Track" + trackIndex)
     .setPosition(position+trackWidth/2-trackSliderWidth/2, topBarHeight+padding)
     .setSize(trackSliderWidth, height-topBarHeight-consoleHeight-trackSettingsHeight-(padding*2))
@@ -147,12 +147,12 @@ void UIAddTrack(int trackIndex)
     public void controlEvent(CallbackEvent event) {
       if (event.getAction() == ControlP5.ACTION_BROADCAST) {
         tracks.get(trackIndex).trackReceive((int)(event.getController().getValue()));
-        tracks.get(trackIndex).trackSend();
+        tracks.get(trackIndex).trackSend(false);
       }
     }
   }
   )
-    ;
+  ;
 
   int settingsHeightPos = height-topBarHeight-consoleHeight-6*settingsHeight;
   int settingWidthSize = trackWidth-padding*2;
@@ -237,6 +237,24 @@ void UIAddTrack(int trackIndex)
     public void controlEvent(CallbackEvent event) {
       if (event.getAction() == ControlP5.ACTION_RELEASED) {
         TrackSmooth(trackIndex);
+      }
+    }
+  }
+  )
+
+  .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+    ;
+
+  cp5.addToggle("Audio" + trackIndex)
+    .setValue(false)
+    .setPosition(position+padding, settingsHeightPos+4*settingsHeight+5*padding)
+    .setSize(settingWidthSize, settingsHeight)
+    //.setColor(paletteButton)
+    .setCaptionLabel("Audio")
+    .addCallback(new CallbackListener() {
+    public void controlEvent(CallbackEvent event) {
+      if (event.getAction() == ControlP5.ACTION_RELEASED) {
+        TrackAudio(trackIndex);
       }
     }
   }

@@ -10,6 +10,7 @@ class Track {
   int trackOutput = 0;
   boolean isMuted = false;
   boolean isSmoothed = false;
+  boolean useAudio = false;
 
   Track (int tValue, int tRangeMin, int tRangeMax, int tInput, int tOutput, int tIndex) {
     trackValue = tValue;
@@ -22,24 +23,43 @@ class Track {
     trackOutput = tOutput;
     isMuted = false;
     isSmoothed = false;
+    useAudio = false;
   }
 
   void trackReceive(int tValue)
   {
     if (!isMuted)
     {
-      trackValue = constrain(tValue, trackRangeMin, trackRangeMax);
+      int newValue = 0;
+
+      //if (!useAudio)
+      //{
+
+
+      if (isSmoothed)
+      {
+        newValue = ceil(lerp(tValue, trackValue, 0.1f));
+      } else {
+        newValue = tValue;
+      }
+      //}
+
+      trackValue = constrain(newValue, trackRangeMin, trackRangeMax);
       //ConsolePrint("sending " + trackValue + "to channel " + trackOutput);
     }
   }
 
-  void trackSend()
+  void trackSend(boolean UpdateSlider)
   {
     if (!isMuted)
     {
-      cp5.get(Slider.class, "Track" + trackIndex).setValue(trackValue);
       dmxOutput.set(trackOutput, trackValue);
       //ConsolePrint("sending " + trackValue + " to channel " + trackOutput);
+
+      if (UpdateSlider)
+      {
+        cp5.get(Slider.class, "Track" + trackIndex).setValue(trackValue);
+      }
     }
   }
 
@@ -50,6 +70,16 @@ class Track {
   }
 }
 
+
+public enum TrackType {
+  MIDI_CC (),
+    MIDI_NOTE (),
+    AUDIO (),
+    MATH ();
+
+  TrackType() {
+  }
+}
 
 void TrackCreate(int tValue, int tRangeMin, int tRangeMax, int tInput, int tOutput, int tIndex)
 {
@@ -93,11 +123,11 @@ public void TrackRemove(int tIndex)
 public void TrackMute(int tIndex)
 {
   tracks.get(tIndex).isMuted = !tracks.get(tIndex).isMuted;
-  if(tracks.get(tIndex).isMuted)
+  if (tracks.get(tIndex).isMuted)
   {
     cp5.get(Toggle.class, "Solo"+tIndex).setState(false);
-  }else{
-   //TrackSolo(tIndex); 
+  } else {
+    //TrackSolo(tIndex);
   }
 }
 
@@ -129,6 +159,12 @@ public void TrackSolo(int tIndex)
 public void TrackSmooth(int tIndex)
 {
   tracks.get(tIndex).isSmoothed = !tracks.get(tIndex).isSmoothed;
+}
+
+public void TrackAudio(int tIndex)
+{
+  tracks.get(tIndex).useAudio = !tracks.get(tIndex).useAudio;
+  AudioSetUp(tracks.get(tIndex).trackInput);
 }
 
 /*[LEGACY] find the track with the matching trackInput and return its index in tracks

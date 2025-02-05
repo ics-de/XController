@@ -34,8 +34,8 @@ void dmxConnect()
         delay(1000);
         ConsolePrint("DMX connection failed");
       }
-    }else{
-        ConsolePrint("DMX connection not enabled");
+    } else {
+      ConsolePrint("DMX connection not enabled");
     }
   }
 }
