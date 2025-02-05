@@ -1,6 +1,5 @@
 import controlP5.*;
 
-
 //ControlP5 variables
 ControlP5 cp5;
 
@@ -10,6 +9,11 @@ boolean isSetUp = true;
 
 int dmxChannels = 512;
 ArrayList<Track> tracks = new ArrayList<Track>();
+
+
+//XController
+String xcVersion = "0.4.1";
+String xcWelcome = "Welcome to XController (v " + xcVersion + ") by Oriol Colomer Delgado - @ics_de | 2025";
 
 void setup()
 {
@@ -31,7 +35,7 @@ void setup()
   MidiSetup();
   UISetup();
 
-  ConsolePrint("Welcome to XController by Oriol Colomer Delgado - @ics_de | 2025");
+  ConsolePrint(xcWelcome);
   MidiBus.list();
   Sound.list();
   //midiCreateBus(2, 5);

@@ -14,7 +14,7 @@ void AudioSetUp(int audioInput) {
   {
   // Create an Input stream which is routed into the Amplitude analyzer
   audioAmp = new Amplitude(this);
-  audioIn = new AudioIn(this, audioInput);
+  audioIn = new AudioIn(this, /*audioInput*/1);
   audioIn.start();
   audioAmp.input(audioIn);
   useAudio = true;
@@ -31,7 +31,7 @@ void AudioUpdate() {
       int audioAmplitude = ceil(audioAmp.analyze()*audioPreAmp*255)-1;
       currentTrack.trackReceive(audioAmplitude);
       currentTrack.trackSend(true);
-      println(audioAmplitude);
+      //println(audioAmplitude);
     }
   }
 }

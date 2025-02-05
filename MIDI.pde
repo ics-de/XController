@@ -77,7 +77,7 @@ void MidiControllerChange(int channel, int number, int value)
     //ConsolePrint("Track " + " not found.");
   }
 }
-
+/*
 void noteOn(int channel, int pitch, int velocity) {
   
   MidiReceiveInput();
@@ -103,10 +103,11 @@ void noteOff(int channel, int pitch, int velocity) {
   println("Pitch:"+pitch);
   println("Velocity:"+velocity);
 }
+*/
 
 void MidiReceiveInput()
 {
   isReceivingMidi = true;
-  delay(20);
-  isReceivingMidi = false;
+  //delay(20);
+  //isReceivingMidi = false;
 }

@@ -1,16 +1,23 @@
 # UPDATE LOG
 
-## v 0.9 | 05/02/2025
+### To Do List
+* to do: add an AudioInput dropdown list next to the MidiInput one
+* to do: move all tracks UI inside a ControlP5 group
+* to do: convert the Console to a ControlP5 TextArea for easier use and info management
+
+## v 0.4.1 | 05/02/2025
+* restructured version naming
+* added media
+* added "default.csv" patch
+
+## v 0.4 | 05/02/2025
 * started implementation of audio analysis to connect audio inputs to DMX channels, investigating FFT too
 * cleaned up how trackReceive() works
 * Improved MIDI input feedback in UI
 * started implementation of TrackType (that being either MIDI CC, MIDI Note, Audio or by Math function)
 
-### To Do List
-* to do: add an AudioInput dropdown list next to the MidiInput one
-* to do: convert the Console to a ControlP5 TextArea for easier use and info management
 
-## v 0.8 | 31/01/2025
+## v 0.3.1 | 31/01/2025
 * track slider's value is now properly sent to the track's output channel
 * added value smoothing. there's still fixes for it to properly work with constant MIDI updates
 * added track soloing
@@ -18,20 +25,20 @@
 * to do: add automatic functions
 
 
-## v 0.7 | 28/01/2025
+## v 0.3 | 28/01/2025
 * fixed UI overdraw bug with UIRefresh()
 * added track muting
 * address is now saved in saved patches
 * moved console's draw functions to UserInterface
 
 
-## v 0.6 | 26/01/2025
+## v 0.2.3 | 26/01/2025
 * flipped this log's order for easier reading
 * added save/load functionality (restart is recommended before loading)
 * added "?" button that links to the GitHub page
 
 
-## v 0.5 | 26/01/2025
+## v 0.2.2 | 26/01/2025
 * implemented MIDI input selection through the User Interface
 * updated color Palette
 * added dispose() function to fix onExit errors
@@ -43,18 +50,18 @@
 * added "examples" folder with a prepared example to send MIDI CC from Ableton through loopMIDI on Windows 10
 
 
-## v 0.4 | 23/01/2025
+## v 0.2.1 | 23/01/2025
 -implemented MIDI input via CC protocol
 -fixed issue with TheMidiBus disabling input on error caused by ConsolePrint()
 -added MIDI input channel selection and DMX output channel selection for each track
 -added MIDI to DMX value scaling (from 0-127 to 0-255)
 
 
-## v 0.3 | 18/01/2025
+## v 0.2 | 18/01/2025
 * started MIDI implementation
 
 
-## v 0.2 | 16/01/2025
+## v 0.1.1 | 16/01/2025
 * separated functionalities into their own .pde files
 * created Track class with trackReceive() and trackSend() functions
 * set up User Interface, track creation

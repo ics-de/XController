@@ -35,7 +35,6 @@ class Track {
       //if (!useAudio)
       //{
 
-
       if (isSmoothed)
       {
         newValue = ceil(lerp(tValue, trackValue, 0.1f));
@@ -45,7 +44,6 @@ class Track {
       //}
 
       trackValue = constrain(newValue, trackRangeMin, trackRangeMax);
-      //ConsolePrint("sending " + trackValue + "to channel " + trackOutput);
     }
   }
 
