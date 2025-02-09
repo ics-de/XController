@@ -49,7 +49,7 @@ void MidiControllerChange(int channel, int number, int value)
 {
   MidiReceiveInput();
   
-  println();
+  //println();
   println("Controller Change:");
   println("--------");
   println("Channel:"+channel);
@@ -77,13 +77,13 @@ void MidiControllerChange(int channel, int number, int value)
     //ConsolePrint("Track " + " not found.");
   }
 }
-/*
+
 void noteOn(int channel, int pitch, int velocity) {
   
   MidiReceiveInput();
   
   // Receive a noteOn
-  println();
+  //println();
   println("Note On:");
   println("--------");
   println("Channel:"+channel);
@@ -96,14 +96,14 @@ void noteOff(int channel, int pitch, int velocity) {
   MidiReceiveInput();
   
   // Receive a noteOff
-  println();
+  //println();
   println("Note Off:");
   println("--------");
   println("Channel:"+channel);
   println("Pitch:"+pitch);
   println("Velocity:"+velocity);
 }
-*/
+
 
 void MidiReceiveInput()
 {

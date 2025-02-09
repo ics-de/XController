@@ -38,6 +38,7 @@ class Track {
       if (isSmoothed)
       {
         newValue = ceil(lerp(tValue, trackValue, 0.1f));
+        delay(10);
       } else {
         newValue = tValue;
       }
@@ -56,7 +57,7 @@ class Track {
 
       if (UpdateSlider)
       {
-        cp5.get(Slider.class, "Track" + trackIndex).setValue(trackValue);
+        cp5.get(Slider.class, "TrackSlider" + trackIndex).setValue(trackValue);
       }
     }
   }
@@ -91,15 +92,18 @@ void TrackCreate(int tValue, int tRangeMin, int tRangeMax, int tInput, int tOutp
 //default method for creating new tracks, mapped to the [+] button
 public void TrackCreateDefault()
 {
-  UpdateTracks();
-  int tIndex = tracks.size();
-  if (tIndex == 0)
+  if (tracks.size() < dmxChannels)
   {
-    TrackCreate(0, 0, 255, tIndex, tIndex, tIndex);
-  } else
-  {
-    TrackCreate(0, 0, 255, tracks.get(tIndex-1).trackInput + 1, tracks.get(tIndex-1).trackOutput + 1, tIndex);
-  }
+    UpdateTracks();
+    int tIndex = tracks.size();
+    if (tIndex == 0)
+    {
+      TrackCreate(0, 0, 255, tIndex, tIndex, tIndex);
+    } else
+    {
+      TrackCreate(0, 0, 255, tracks.get(tIndex-1).trackInput + 1, tracks.get(tIndex-1).trackOutput + 1, tIndex);
+    }
+  }else { println("Max tracks reached: " + dmxChannels); }
 }
 
 
@@ -107,6 +111,7 @@ public void TrackRemove(int tIndex)
 {
   tracks.remove(tIndex);
   cp5.remove("Track"+tIndex);
+  cp5.remove("Slider"+tIndex);
   cp5.remove("In"+tIndex);
   cp5.remove("Out"+tIndex);
   cp5.remove("Mute"+tIndex);
@@ -162,7 +167,7 @@ public void TrackSmooth(int tIndex)
 public void TrackAudio(int tIndex)
 {
   tracks.get(tIndex).useAudio = !tracks.get(tIndex).useAudio;
-  AudioSetUp(tracks.get(tIndex).trackInput);
+  CreateAudioInput(tracks.get(tIndex).trackInput);
 }
 
 /*[LEGACY] find the track with the matching trackInput and return its index in tracks

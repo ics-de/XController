@@ -32,12 +32,15 @@ void setup()
   background(GetPalette(2));
   //PFont font = createFont("arial",12);
 
+  MidiBus.list();
+  Sound.list();
+
   MidiSetup();
+  AudioSetup();
   UISetup();
 
   ConsolePrint(xcWelcome);
-  MidiBus.list();
-  Sound.list();
+  
   //midiCreateBus(2, 5);
   //Load("default");
 }

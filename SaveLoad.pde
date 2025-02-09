@@ -78,8 +78,8 @@ void Load(String fileName) {
       cp5.get(Numberbox.class, "In"+trackIndex).setValue(row.getInt("in"));
       cp5.get(Numberbox.class, "Out"+trackIndex).setValue(row.getInt("out"));
 
-      ConsolePrint("Succesfully loaded '" + fileName +".csv'");
     }
+    ConsolePrint("Succesfully loaded '" + fileName +".csv'");
   } else {
     ConsolePrint("Error: File '" + fileName + ".csv' not found!");
   }
