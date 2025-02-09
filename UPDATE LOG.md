@@ -18,7 +18,6 @@
 * cleaned up how trackReceive() works
 * Improved MIDI input feedback in UI
 * started implementation of TrackType (that being either MIDI CC, MIDI Note, Audio or by Math function)
--added "default.csv" patch
 
 
 ## v 0.3.1 | 31/01/2025
