@@ -1,8 +1,13 @@
 # UPDATE LOG
 
 ### To Do List
-* to do: add an AudioInput dropdown list just like the MidiInput one
-* to do: move track's UI inside a ControlP5 group
+* add an AudioInput dropdown list just like the MidiInput one
+* cue list
+
+## v 0.4.3 | 10/02/2025
+* implemented ControlP5 groups to tracks
+* started work on the Inspector to space up information and reduce clutter
+* cleaned some of the UI creation process
 
 ## v 0.4.2 | 09/02/2025
 * converted the Console UI to a ControlP5 TextArea for easier use and info management

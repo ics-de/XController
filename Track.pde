@@ -57,7 +57,7 @@ class Track {
 
       if (UpdateSlider)
       {
-        cp5.get(Slider.class, "TrackSlider" + trackIndex).setValue(trackValue);
+        cp5.get(Slider.class, "Slider" + trackIndex).setValue(trackValue);
       }
     }
   }

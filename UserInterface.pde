@@ -7,7 +7,6 @@ int connectWidth = 100;
 int saveloadWidth = 40;
 
 int trackWidth = 70;  //recommended range 50-80
-int trackGroupHeight = 10;
 int trackSliderWidth = 20;
 int trackSettingsHeight = 200;
 
@@ -17,6 +16,10 @@ int buttonSmallSize = 20;
 
 int padding = 10;
 
+int inspectorHeight = 300;
+
+int groupLabelHeight = 10;
+
 DropdownList uiMidiInList;
 //DropdownList uiMidiOutList;
 
@@ -25,6 +28,17 @@ Textarea uiConsole;
 
 void UISetup()
 {
+  //Inspector
+  Group inspector = cp5.addGroup("Inspector")
+    .setPosition(0, height-consoleHeight-inspectorHeight+groupLabelHeight)
+    .setSize(width,inspectorHeight-groupLabelHeight)
+    .setBackgroundColor(GetPalette(3))
+    .disableCollapse()
+    .setMouseOver(false)
+    //.getCaptionLabel().align (ControlP5.RIGHT, ControlP5.CENTER)
+    ;
+  
+  //Console
   fill(GetPalette(0));
   rect(0, topBarHeight, width, height-topBarHeight-consoleHeight);
 
@@ -137,6 +151,7 @@ void UIRefresh()
   }
   rect(width/2, padding, 5, 5);
 
+  /*
   for (int i = 0; i < tracks.size(); i++)
   {
     stroke(GetPalette(0));
@@ -148,34 +163,42 @@ void UIRefresh()
 
     rect(trackWidth*i, topBarHeight, trackWidth, height-topBarHeight-consoleHeight);
   }
+  */
   //UIConsole();
 }
+
 
 void UIAddTrack(int trackIndex)
 {
   Track currentTrack = tracks.get(trackIndex);
+  //int position = trackWidth*trackIndex;
   int position = trackWidth*trackIndex;
+  int groupHeight = height-topBarHeight-consoleHeight-groupLabelHeight-inspectorHeight;
+  int sliderHeight = height-topBarHeight-consoleHeight-inspectorHeight-trackSettingsHeight-(padding*2);
+  //println(groupHeight);
+  
   stroke(GetPalette(0));
   //fill(GetPalette(3));
   //rect(position, topBarHeight, trackWidth, height-topBarHeight-consoleHeight);
 
   Group trackGroup = cp5.addGroup("Track" + trackIndex)
-    .setPosition(position, topBarHeight+trackGroupHeight)
-    .setSize(trackWidth,height-topBarHeight-consoleHeight-trackGroupHeight)
+    .setPosition(position, topBarHeight+groupLabelHeight)
+    .setSize(trackWidth,groupHeight)
     .setBackgroundColor(GetPalette(3))
     .disableCollapse()
     .setMouseOver(false)
+    .setCaptionLabel("Track "+trackIndex)
     //.getCaptionLabel().align (ControlP5.RIGHT, ControlP5.CENTER)
     ;
 
   cp5.addSlider("Slider" + trackIndex)
     //.setPosition(position+trackWidth/2-trackSliderWidth/2, topBarHeight+padding)
-    .setPosition(position+trackWidth/2-trackSliderWidth/2, padding)
-    .setSize(trackSliderWidth, height-topBarHeight-consoleHeight-trackSettingsHeight-(padding*2))
+    .setPosition(trackWidth/2-trackSliderWidth/2, padding)
+    .setSize(trackSliderWidth, sliderHeight)
     .setRange(currentTrack.trackRangeMin, currentTrack.trackRangeMax)
     .setValue(currentTrack.trackValue)
     .setDecimalPrecision(0)
-    .setCaptionLabel(str(trackIndex))
+    .setCaptionLabel(""/*str(trackIndex)*/)
     .setGroup(trackGroup)
     .addCallback(new CallbackListener() {
     public void controlEvent(CallbackEvent event) {
@@ -189,7 +212,7 @@ void UIAddTrack(int trackIndex)
   ;
 
   //int settingsHeightPos = height-topBarHeight-consoleHeight-6*settingsHeight;
-  int settingsHeightPos = height-topBarHeight-consoleHeight-6*settingsHeight;
+  int settingsHeightPos = sliderHeight + 2*padding;
   int settingWidthSize = trackWidth-padding*2;
   String settingsLabelIn = "In ";
   String settingsLabelOut = "Out ";
@@ -202,7 +225,7 @@ void UIAddTrack(int trackIndex)
 
   //SETTINGS
   cp5.addNumberbox("In" + trackIndex)
-    .setPosition(position+padding, settingsHeightPos+padding)
+    .setPosition(padding, settingsHeightPos+padding)
     .setSize(settingWidthSize, settingsHeight)
     .setValue(currentTrack.trackInput)
     .setRange(currentTrack.trackRangeMin, currentTrack.trackRangeMax)
@@ -216,7 +239,7 @@ void UIAddTrack(int trackIndex)
     ;
 
   cp5.addNumberbox("Out" + trackIndex)
-    .setPosition(position+padding, settingsHeightPos+settingsHeight+2*padding)
+    .setPosition(padding, settingsHeightPos+settingsHeight+2*padding)
     .setSize(settingWidthSize, settingsHeight)
     .setValue(currentTrack.trackOutput)
     .setRange(currentTrack.trackRangeMin, currentTrack.trackRangeMax)
@@ -230,7 +253,7 @@ void UIAddTrack(int trackIndex)
 
   cp5.addToggle("Mute" + trackIndex)
     .setValue(false)
-    .setPosition(position+padding, settingsHeightPos+2*settingsHeight+3*padding)
+    .setPosition(padding, settingsHeightPos+2*settingsHeight+3*padding)
     .setSize(settingWidthSize/2, settingsHeight)
     //.setColor(paletteButton)
     .setCaptionLabel("M")
@@ -249,7 +272,7 @@ void UIAddTrack(int trackIndex)
 
   cp5.addToggle("Solo" + trackIndex)
     .setValue(false)
-    .setPosition(position+padding+settingWidthSize/2, settingsHeightPos+2*settingsHeight+3*padding)
+    .setPosition(padding+settingWidthSize/2, settingsHeightPos+2*settingsHeight+3*padding)
     .setSize(settingWidthSize/2, settingsHeight)
     //.setColor(paletteButton)
     .setCaptionLabel("S")
@@ -268,7 +291,7 @@ void UIAddTrack(int trackIndex)
 
   cp5.addToggle("Smooth" + trackIndex)
     .setValue(false)
-    .setPosition(position+padding, settingsHeightPos+3*settingsHeight+4*padding)
+    .setPosition(padding, settingsHeightPos+3*settingsHeight+4*padding)
     .setSize(settingWidthSize, settingsHeight)
     //.setColor(paletteButton)
     .setCaptionLabel("Smooth")
@@ -287,7 +310,7 @@ void UIAddTrack(int trackIndex)
 
   cp5.addToggle("Audio" + trackIndex)
     .setValue(false)
-    .setPosition(position+padding, settingsHeightPos+4*settingsHeight+5*padding)
+    .setPosition(padding, settingsHeightPos+4*settingsHeight+5*padding)
     .setSize(settingWidthSize, settingsHeight)
     //.setColor(paletteButton)
     .setCaptionLabel("Audio")
