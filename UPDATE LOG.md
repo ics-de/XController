@@ -4,6 +4,9 @@
 * add an AudioInput dropdown list just like the MidiInput one
 * cue list
 
+## v 0.4.4 | 14/02/2025
+* lowered mouse sensitivity for In/Out scroll
+
 ## v 0.4.3 | 10/02/2025
 * implemented ControlP5 groups to tracks
 * started work on the Inspector to space up information and reduce clutter

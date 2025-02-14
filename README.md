@@ -13,9 +13,9 @@ Check out the [wiki](https://github.com/ics-de/XController/wiki) for documentati
 
 ## Libraries
 The app uses the following Processing libraries: <br>
-	* DMXP512 <br>
-	* Control p5 <br>
-	* MIDIBus<br>
+* DMXP512
+* Control p5
+* MIDIBus
 
 Read the [wiki article on libraries](https://github.com/ics-de/XController/wiki/Libraries) for more info on them.
 

@@ -12,7 +12,7 @@ ArrayList<Track> tracks = new ArrayList<Track>();
 
 
 //XController
-String xcVersion = "0.4.2";
+String xcVersion = "0.4.3";
 String xcWelcome = "Welcome to XController (v " + xcVersion + ") by Oriol Colomer Delgado - @ics_de | 2025";
 
 void setup()
