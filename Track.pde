@@ -1,9 +1,14 @@
+ArrayList<Track> tracks = new ArrayList<Track>();
+
 class Track {
+
+  int trackIndex = 0;
+  String trackName = "Track";
+  int trackColor = 0;
+
   int trackValue = 127;
   int trackRangeMin = 0;
   int trackRangeMax = 255;
-
-  int trackIndex = 0;
 
   //Track Settings
   int trackInput = 0;
@@ -12,12 +17,14 @@ class Track {
   boolean isSmoothed = false;
   boolean useAudio = false;
 
-  Track (int tValue, int tRangeMin, int tRangeMax, int tInput, int tOutput, int tIndex) {
+  Track (int tValue, int tRangeMin, int tRangeMax, int tInput, int tOutput, int tIndex, String tName, int tColor) {
     trackValue = tValue;
     trackRangeMin = tRangeMin;
     trackRangeMax = tRangeMax;
 
     trackIndex = tIndex;
+    trackName = tName;
+    trackColor = tColor;
 
     trackInput = tInput;
     trackOutput = tOutput;
@@ -80,11 +87,11 @@ public enum TrackType {
   }
 }
 
-void TrackCreate(int tValue, int tRangeMin, int tRangeMax, int tInput, int tOutput, int tIndex)
+void TrackCreate(int tValue, int tRangeMin, int tRangeMax, int tInput, int tOutput, int tIndex, String tName, int tColor)
 {
   int trackIndex = tracks.size();
 
-  tracks.add(new Track(tValue, tRangeMin, tRangeMax, tInput, tOutput, tIndex));
+  tracks.add(new Track(tValue, tRangeMin, tRangeMax, tInput, tOutput, tIndex, tName, tColor));
 
   UIAddTrack(trackIndex);
 }
@@ -98,29 +105,34 @@ public void TrackCreateDefault()
     int tIndex = tracks.size();
     if (tIndex == 0)
     {
-      TrackCreate(0, 0, 255, tIndex, tIndex, tIndex);
+      TrackCreate(0, 0, 255, tIndex, tIndex, tIndex, "Track 0", 1);
     } else
     {
-      TrackCreate(0, 0, 255, tracks.get(tIndex-1).trackInput + 1, tracks.get(tIndex-1).trackOutput + 1, tIndex);
+      TrackCreate(0, 0, 255, tracks.get(tIndex-1).trackInput + 1, tracks.get(tIndex-1).trackOutput + 1, tIndex, "Track " + tIndex, tracks.get(tIndex-1).trackColor);
     }
-  }else { println("Max tracks reached: " + dmxChannels); }
+  } else {
+    println("Max tracks reached: " + dmxChannels);
+  }
 }
 
 
 public void TrackRemove(int tIndex)
 {
-  tracks.remove(tIndex);
-  cp5.remove("Track"+tIndex);
-  cp5.remove("Slider"+tIndex);
-  cp5.remove("In"+tIndex);
-  cp5.remove("Out"+tIndex);
-  cp5.remove("Mute"+tIndex);
-  cp5.remove("Solo"+tIndex);
-  cp5.remove("Smooth"+tIndex);
-  cp5.remove("Remove"+tIndex);
+  ControllerGroup g = cp5.getGroup("Track" + tIndex);
 
-  fill(GetPalette(0));
-  rect(trackWidth*tIndex, topBarHeight, trackWidth, height-topBarHeight-consoleHeight);
+  g.getController("Inspect"+tIndex).remove();
+  g.getController("Slider"+tIndex).remove();
+  g.getController("In"+tIndex).remove();
+  g.getController("Out"+tIndex).remove();
+  g.getController("Mute"+tIndex).remove();
+  g.getController("Solo"+tIndex).remove();
+  g.getController("Smooth"+tIndex).remove();
+  g.getController("Audio"+tIndex).remove();
+  //g.getController("Remove"+tIndex).remove();
+
+  cp5.remove("Track"+tIndex);
+
+  //tracks.remove(tIndex);
 }
 
 public void TrackMute(int tIndex)
@@ -168,6 +180,11 @@ public void TrackAudio(int tIndex)
 {
   tracks.get(tIndex).useAudio = !tracks.get(tIndex).useAudio;
   CreateAudioInput(tracks.get(tIndex).trackInput);
+}
+
+public void TrackColor(int tIndex, int tColor)
+{
+  tracks.get(tIndex).trackColor = tColor;
 }
 
 /*[LEGACY] find the track with the matching trackInput and return its index in tracks

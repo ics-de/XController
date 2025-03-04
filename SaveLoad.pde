@@ -22,6 +22,8 @@ void Save(String fileName) {
   //SaveFile.addColumn("midiIn");
 
   SaveFile.addColumn("index");
+  SaveFile.addColumn("name");
+  SaveFile.addColumn("color");
   SaveFile.addColumn("in");
   SaveFile.addColumn("out");
 
@@ -37,12 +39,14 @@ void Save(String fileName) {
     }
 
     newRow.setInt("index", i);
+    newRow.setString("name", currentTrack.trackName);
+    newRow.setInt("color", currentTrack.trackColor);
     newRow.setInt("in", currentTrack.trackInput);
     newRow.setInt("out", currentTrack.trackOutput);
   }
 
   saveTable(SaveFile, "data/patches/" + fileName + ".csv");
-  ConsolePrint("Succesfully saved '" + fileName +".csv' in /patches");
+  ConsolePrint("Succesfully saved '" + fileName +".csv' in /data/patches");
 }
 
 void Load(String fileName) {
@@ -61,23 +65,43 @@ void Load(String fileName) {
   }
 
   if (LoadFile != null) {
-    for (int i = tracks.size(); i < LoadFile.getRowCount(); i++) {
-      TrackCreateDefault();
+    int rowCount = LoadFile.getRowCount();
+    
+    for (int i = 0; i < tracks.size(); i++) {
+        TrackRemove(i);
+      }
+      
+    tracks.clear();
+    
+    for (int i = 0; i < rowCount; i++) {
+        TrackCreateDefault();
+      }
+    /*
+    if (tracks.size() < rowCount) {
+      for (int i = tracks.size(); i < rowCount; i++) {
+        TrackCreateDefault();
+      }
+    } else {
+      for (int i = tracks.size(); i < rowCount; i++) {
+        TrackCreateDefault();
+      }
     }
+    */
 
     cp5.get(Textfield.class, "Address").setText(LoadFile.getRow(0).getString("address"));
     address = cp5.get(Textfield.class, "Address").getText();
 
     for (TableRow row : LoadFile.rows()) {
       int trackIndex = row.getInt("index");
-
+      
+      tracks.get(trackIndex).trackName = row.getString("name");
+      tracks.get(trackIndex).trackColor = row.getInt("color");
 
       tracks.get(trackIndex).trackInput = row.getInt("in");
       tracks.get(trackIndex).trackOutput = row.getInt("out");
 
       cp5.get(Numberbox.class, "In"+trackIndex).setValue(row.getInt("in"));
       cp5.get(Numberbox.class, "Out"+trackIndex).setValue(row.getInt("out"));
-
     }
     ConsolePrint("Succesfully loaded '" + fileName +".csv'");
   } else {

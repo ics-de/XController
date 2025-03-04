@@ -3,6 +3,17 @@
 ### To Do List
 * add an AudioInput dropdown list just like the MidiInput one
 * cue list
+* fix the remove track button
+
+## v 0.5 | 04/03/2025
+* added Inspector functionality: trackName, trackColor, trackIn & trackOut
+* added horizontal scrollbar to see all existing tracks
+* fixed track muting color
+* removed some legacy code
+* partially fixed the TrackRemove() function, it now works with loading. However, it still doesn't allow for tracks to be removed with a button
+* cleaned up UIRefresh()
+* added default patches
+* replaced deprecated ControlP5 actions in UserInterface
 
 ## v 0.4.4 | 14/02/2025
 * lowered mouse sensitivity for In/Out scroll

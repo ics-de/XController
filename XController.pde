@@ -1,6 +1,5 @@
 import controlP5.*;
 
-//ControlP5 variables
 ControlP5 cp5;
 
 String address = "COM4";          //either port COM4 or IP
@@ -8,11 +7,11 @@ String address = "COM4";          //either port COM4 or IP
 boolean isSetUp = true;
 
 int dmxChannels = 512;
-ArrayList<Track> tracks = new ArrayList<Track>();
+
 
 
 //XController
-String xcVersion = "0.4.3";
+String xcVersion = "0.5";
 String xcWelcome = "Welcome to XController (v " + xcVersion + ") by Oriol Colomer Delgado - @ics_de | 2025";
 
 void setup()
@@ -52,6 +51,14 @@ void draw()
   if(useAudio)
   {
    AudioUpdate(); 
+  }
+}
+
+void keyPressed() {
+  if (keyCode == ENTER) {
+    if(cp5.get(Textfield.class, "InspectorName").isFocus()){
+       InspectorNameSet(); 
+    }
   }
 }
 
