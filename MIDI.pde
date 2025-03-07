@@ -9,6 +9,8 @@ boolean scaleMidiToDmx = true;
 
 boolean isReceivingMidi = false;
 
+boolean debugMidi = false;
+
 class MidiInOut {
 
   int inputIndex = 0;
@@ -48,14 +50,19 @@ void controllerChange(int channel, int number, int value) {
 void MidiControllerChange(int channel, int number, int value)
 {
   MidiReceiveInput();
-  
+
+  /*
   //println();
-  println("Controller Change:");
-  println("--------");
-  println("Channel:"+channel);
-  println("Number:"+number);
-  println("Value:"+value);
-  //ConsolePrint("CC: " + channel + " | " + number + " | " + value);
+   println("Controller Change:");
+   println("--------");
+   println("Channel:"+channel);
+   println("Number:"+number);
+   println("Value:"+value);
+   //ConsolePrint("CC: " + channel + " | " + number + " | " + value);
+   */
+  if (debugMidi) {
+    println("CC: " + channel + " | " + number + " | " + value);
+  }
 
   if (scaleMidiToDmx)
   {
@@ -79,9 +86,9 @@ void MidiControllerChange(int channel, int number, int value)
 }
 
 void noteOn(int channel, int pitch, int velocity) {
-  
+
   MidiReceiveInput();
-  
+
   // Receive a noteOn
   //println();
   println("Note On:");
@@ -92,9 +99,9 @@ void noteOn(int channel, int pitch, int velocity) {
 }
 
 void noteOff(int channel, int pitch, int velocity) {
-  
+
   MidiReceiveInput();
-  
+
   // Receive a noteOff
   //println();
   println("Note Off:");

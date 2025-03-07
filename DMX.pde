@@ -4,7 +4,7 @@ import processing.serial.*;
 
 //DMXP512 variables
 DmxP512 dmxOutput;
-int universeSize=128;
+int universeSize=512;
 boolean LANBOX=false;
 String LANBOX_IP="192.168.1.77";  //update IP
 boolean DMXPRO=true;

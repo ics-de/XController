@@ -43,6 +43,11 @@ Group inspector;
 Textarea inspectorText;
 int currentTrackInspected = 0;
 
+
+//Fonts
+int fontSize = 10;
+PFont font;
+
 void UIInspect(int trackIndex) {
   currentTrackInspected = trackIndex;
   Track currentTrack = tracks.get(currentTrackInspected);
@@ -74,6 +79,8 @@ void UISetup()
   int inspectorHeightPos = height-consoleHeight-inspectorHeight+groupLabelHeight;
   int inspectorHeightSize = inspectorHeight-groupLabelHeight;
 
+  font = createFont("arial",fontSize);
+
   //Inspector
   inspector = cp5.addGroup("Inspector")
     .setPosition(0, inspectorHeightPos)
@@ -81,6 +88,7 @@ void UISetup()
     .setBackgroundColor(GetPalette(3))
     .disableCollapse()
     .setMouseOver(false)
+    .setFont(font)
     ;
 
   /*
@@ -105,6 +113,7 @@ void UISetup()
     .setColor(GetPalette(4))
     .setColorBackground(GetPalette(0))
     .setColorForeground(GetPalette(2))
+    .setFont(font)
     ;
   console = cp5.addConsole(uiConsole);
 
@@ -131,6 +140,7 @@ void UISetup()
     .setSize(connectWidth, topBarHeight-padding*3)
     .setColor(paletteButton)
     .setCaptionLabel("Connect DMX")
+    .setFont(font)
     ;
 
   cp5.addTextfield("Address")    //Used for both IP and COM Port
@@ -140,6 +150,7 @@ void UISetup()
     .setFocus(false)
     .setCaptionLabel("input IP address or COM port...")
     .setAutoClear(false)
+    .setFont(font)
     ;
 
   cp5.addButton("TrackCreateDefault")
@@ -148,10 +159,15 @@ void UISetup()
     .setSize(topBarHeight-2*padding, topBarHeight-2*padding)
     .setColor(paletteButton)
     .setCaptionLabel("+")
+    .setFont(font)
     ;
 
   uiMidiInList = cp5.addDropdownList("MidiInputs")
     .setPosition(width/2 + padding, padding)
+    .setSize(addressWidth, addressWidth)
+    .setBarHeight(fontSize+padding)
+    .setItemHeight(fontSize+padding)
+    .setFont(font)
     ;
   UISetUpDropdownList(uiMidiInList);
 
@@ -166,6 +182,7 @@ void UISetup()
     .setText("patch01")
     .setFocus(false)
     .setCaptionLabel("type file name to save/load")
+    .setFont(font)
     ;
 
   cp5.addButton("SavePatch")
@@ -174,6 +191,7 @@ void UISetup()
     .setSize(saveloadWidth, topBarHeight-padding*3)
     .setColor(paletteButton)
     .setCaptionLabel("Save")
+    .setFont(font)
     ;
 
   cp5.addButton("LoadPatch")
@@ -182,6 +200,7 @@ void UISetup()
     .setSize(saveloadWidth, topBarHeight-padding*3)
     .setColor(paletteButton)
     .setCaptionLabel("Load")
+    .setFont(font)
     ;
 
 
@@ -285,8 +304,9 @@ void UIAddTrack(int trackIndex)
     .setBackgroundColor(color(GetPalette(3), 0))
     .disableCollapse()
     .setMouseOver(false)
-    .setCaptionLabel("Track "+trackIndex)
+    .setCaptionLabel(currentTrack.trackName)
     //.getCaptionLabel().align (ControlP5.RIGHT, ControlP5.CENTER)
+    .setFont(font)
     ;
 
   cp5.addButton("Inspect" + trackIndex)
@@ -314,6 +334,7 @@ void UIAddTrack(int trackIndex)
     .setDecimalPrecision(0)
    .setCaptionLabel(""/*str(trackIndex)*/    )
     .setGroup(trackGroup)
+    .setFont(font)
     .addCallback(new CallbackListener() {
     public void controlEvent(CallbackEvent event) {
       if (event.getAction() == ControlP5.ACTION_BROADCAST) {
@@ -340,13 +361,14 @@ void UIAddTrack(int trackIndex)
     .setPosition(padding, settingsHeightPos+padding)
     .setSize(settingWidthSize, settingsHeight)
     .setValue(currentTrack.trackInput)
-    .setRange(currentTrack.trackRangeMin, currentTrack.trackRangeMax)
+    .setRange(0, universeSize)
     .setDecimalPrecision(0)
     .setDirection(Controller.HORIZONTAL)
     .setScrollSensitivity(1)
     .setMultiplier(0.125f)
     .setCaptionLabel(settingsLabelIn)
     .setGroup(trackGroup)
+    .setFont(font)
     .addCallback(new CallbackListener() {
     public void controlEvent(CallbackEvent event) {
       if (event.getAction() == ControlP5.ACTION_RELEASE || event.getAction() == ControlP5.ACTION_RELEASE_OUTSIDE) {
@@ -364,13 +386,14 @@ void UIAddTrack(int trackIndex)
     .setPosition(padding, settingsHeightPos+settingsHeight+2*padding)
     .setSize(settingWidthSize, settingsHeight)
     .setValue(currentTrack.trackOutput)
-    .setRange(currentTrack.trackRangeMin, currentTrack.trackRangeMax)
+    .setRange(0, universeSize)
     .setDecimalPrecision(0)
     .setDirection(Controller.HORIZONTAL)
     .setScrollSensitivity(1)
     .setMultiplier(0.125f)
     .setCaptionLabel(settingsLabelOut)
     .setGroup(trackGroup)
+    .setFont(font)
     .addCallback(new CallbackListener() {
     public void controlEvent(CallbackEvent event) {
       if (event.getAction() == ControlP5.ACTION_RELEASE || event.getAction() == ControlP5.ACTION_RELEASE_OUTSIDE) {
@@ -391,6 +414,7 @@ void UIAddTrack(int trackIndex)
     //.setColor(paletteButton)
     .setCaptionLabel("M")
     .setGroup(trackGroup)
+    .setFont(font)
     .addCallback(new CallbackListener() {
     public void controlEvent(CallbackEvent event) {
       if (event.getAction() == ControlP5.ACTION_RELEASE) {
@@ -410,6 +434,7 @@ void UIAddTrack(int trackIndex)
     //.setColor(paletteButton)
     .setCaptionLabel("S")
     .setGroup(trackGroup)
+    .setFont(font)
     .addCallback(new CallbackListener() {
     public void controlEvent(CallbackEvent event) {
       if (event.getAction() == ControlP5.ACTION_RELEASE) {
@@ -429,6 +454,7 @@ void UIAddTrack(int trackIndex)
     //.setColor(paletteButton)
     .setCaptionLabel("Smooth")
     .setGroup(trackGroup)
+    .setFont(font)
     .addCallback(new CallbackListener() {
     public void controlEvent(CallbackEvent event) {
       if (event.getAction() == ControlP5.ACTION_RELEASE) {
@@ -448,6 +474,7 @@ void UIAddTrack(int trackIndex)
     //.setColor(paletteButton)
     .setCaptionLabel("Audio")
     .setGroup(trackGroup)
+    .setFont(font)
     .addCallback(new CallbackListener() {
     public void controlEvent(CallbackEvent event) {
       if (event.getAction() == ControlP5.ACTION_RELEASE) {
@@ -491,6 +518,7 @@ void UISetUpInspector() {
     .setFocus(false)
     .setCaptionLabel("Track Name")
     .setAutoClear(false)
+    .setFont(font)
     ;
 
   cp5.addButton("InspectorNameSet")
@@ -500,6 +528,7 @@ void UISetUpInspector() {
     .setColor(paletteButton)
     .setCaptionLabel(">")
     .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+    .setFont(font)
     ;
 
   UISetUpInspectorColors();
@@ -509,12 +538,13 @@ void UISetUpInspector() {
     .setPosition(padding, padding+3*insNameSetSize)
     .setSize(settingWidthSize, settingsHeight)
     .setValue(0)
-    .setRange(0, 255)
+    .setRange(0, universeSize)
     .setDecimalPrecision(0)
     .setDirection(Controller.HORIZONTAL)
     .setScrollSensitivity(1)
     .setMultiplier(0.125f)
     .setCaptionLabel("In")
+    .setFont(font)
     .addCallback(new CallbackListener() {
     public void controlEvent(CallbackEvent event) {
       if (event.getAction() == ControlP5.ACTION_RELEASE || event.getAction() == ControlP5.ACTION_RELEASE_OUTSIDE) {
@@ -532,12 +562,13 @@ void UISetUpInspector() {
     .setPosition(2*padding+settingWidthSize, padding+3*insNameSetSize)
     .setSize(settingWidthSize, settingsHeight)
     .setValue(0)
-    .setRange(0, 255)
+    .setRange(0, universeSize)
     .setDecimalPrecision(0)
     .setDirection(Controller.HORIZONTAL)
     .setScrollSensitivity(1)
     .setMultiplier(0.125f)
     .setCaptionLabel("Out")
+    .setFont(font)
     .addCallback(new CallbackListener() {
     public void controlEvent(CallbackEvent event) {
       if (event.getAction() == ControlP5.ACTION_RELEASE || event.getAction() == ControlP5.ACTION_RELEASE_OUTSIDE) {
@@ -564,12 +595,15 @@ void UIUpdateInOutValues(boolean fromInspector) {
 void InspectorNameSet() {
   if (!isSetUp)
   {
-    String newName = cp5.get(Textfield.class, "InspectorName").getText();
-    tracks.get(currentTrackInspected).trackName = newName;
-    cp5.getGroup("Track"+currentTrackInspected).setCaptionLabel(tracks.get(currentTrackInspected).trackName);
+    InspectorNameTrack(currentTrackInspected);
   }
 }
 
+void InspectorNameTrack(int trackIndex) {
+  String newName = cp5.get(Textfield.class, "InspectorName").getText();
+  tracks.get(trackIndex).trackName = newName;
+  cp5.getGroup("Track"+currentTrackInspected).setCaptionLabel(tracks.get(currentTrackInspected).trackName);
+}
 
 void UISetUpInspectorColors() {
   for (int i = 0; i < paletteColors.length; i++) {
@@ -600,6 +634,11 @@ void UIInspectorColorSelect(int c) {
   TrackColor(currentTrackInspected, c);
 }
 
+void UIUpdateNames() {
+  for (int i = 0; i < tracks.size(); i++) {
+    cp5.getGroup("Track"+i).setCaptionLabel(tracks.get(i).trackName);
+  }
+}
 
 void UIScrollbarCalculate() {
   scrollbarRange = tracks.size()*trackWidth;

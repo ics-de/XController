@@ -66,34 +66,34 @@ void Load(String fileName) {
 
   if (LoadFile != null) {
     int rowCount = LoadFile.getRowCount();
-    
+
     for (int i = 0; i < tracks.size(); i++) {
-        TrackRemove(i);
-      }
-      
+      TrackRemove(i);
+    }
+
     tracks.clear();
-    
+
     for (int i = 0; i < rowCount; i++) {
-        TrackCreateDefault();
-      }
+      TrackCreateDefault();
+    }
     /*
     if (tracks.size() < rowCount) {
-      for (int i = tracks.size(); i < rowCount; i++) {
-        TrackCreateDefault();
-      }
-    } else {
-      for (int i = tracks.size(); i < rowCount; i++) {
-        TrackCreateDefault();
-      }
-    }
-    */
+     for (int i = tracks.size(); i < rowCount; i++) {
+     TrackCreateDefault();
+     }
+     } else {
+     for (int i = tracks.size(); i < rowCount; i++) {
+     TrackCreateDefault();
+     }
+     }
+     */
 
     cp5.get(Textfield.class, "Address").setText(LoadFile.getRow(0).getString("address"));
     address = cp5.get(Textfield.class, "Address").getText();
 
     for (TableRow row : LoadFile.rows()) {
       int trackIndex = row.getInt("index");
-      
+
       tracks.get(trackIndex).trackName = row.getString("name");
       tracks.get(trackIndex).trackColor = row.getInt("color");
 
@@ -102,6 +102,9 @@ void Load(String fileName) {
 
       cp5.get(Numberbox.class, "In"+trackIndex).setValue(row.getInt("in"));
       cp5.get(Numberbox.class, "Out"+trackIndex).setValue(row.getInt("out"));
+
+      UIUpdateInOutValues(false);
+      UIUpdateNames();
     }
     ConsolePrint("Succesfully loaded '" + fileName +".csv'");
   } else {

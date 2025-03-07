@@ -57,7 +57,7 @@ void draw()
 void keyPressed() {
   if (keyCode == ENTER) {
     if(cp5.get(Textfield.class, "InspectorName").isFocus()){
-       InspectorNameSet(); 
+       InspectorNameTrack(currentTrackInspected); 
     }
   }
 }

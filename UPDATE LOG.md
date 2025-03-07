@@ -4,6 +4,15 @@
 * add an AudioInput dropdown list just like the MidiInput one
 * cue list
 * fix the remove track button
+* take MIDI CC channels into account
+* move MidiInputs DropdownList to a ScrollableList
+
+## v 0.5.1 | 07/03/2025
+* changed font to Arial for better legibility
+* fixed names not being updated when loading patches
+* updated In/Out max range to whatever the universe size is set to (most of the time, 512)
+* performed some stress-heavy testing (448 channels!!)
+* adjusted size of MidiInputs dropdown
 
 ## v 0.5 | 04/03/2025
 * added Inspector functionality: trackName, trackColor, trackIn & trackOut
