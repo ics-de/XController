@@ -1,7 +1,7 @@
 # XController
 DMX connection user interface app. Created using Processing.
 
-![general view](https://github.com/ics-de/XController/blob/main/media/v0_4-b.png)
+![general view](https://github.com/ics-de/XController/blob/main/media/v0_6-a.png)
 
 ## Documentation
 Check out the [wiki](https://github.com/ics-de/XController/wiki) for documentation and guides.
