@@ -75,6 +75,7 @@ void Load(String fileName) {
 
     for (int i = 0; i < rowCount; i++) {
       TrackCreateDefault();
+      UIScrollbarCalculate();
     }
     /*
     if (tracks.size() < rowCount) {

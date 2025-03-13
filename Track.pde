@@ -11,13 +11,14 @@ class Track {
   int trackRangeMax = 255;
 
   //Track Settings
+  int trackChannel = 0;
   int trackInput = 0;
   int trackOutput = 0;
   boolean isMuted = false;
   boolean isSmoothed = false;
   boolean useAudio = false;
 
-  Track (int tValue, int tRangeMin, int tRangeMax, int tInput, int tOutput, int tIndex, String tName, int tColor) {
+  Track (int tValue, int tRangeMin, int tRangeMax, int tChannel, int tInput, int tOutput, int tIndex, String tName, int tColor) {
     trackValue = tValue;
     trackRangeMin = tRangeMin;
     trackRangeMax = tRangeMax;
@@ -26,6 +27,7 @@ class Track {
     trackName = tName;
     trackColor = tColor;
 
+    trackChannel = tChannel;
     trackInput = tInput;
     trackOutput = tOutput;
     isMuted = false;
@@ -71,6 +73,7 @@ class Track {
 
   void trackUpdate()
   {
+    trackChannel = int(cp5.get(Numberbox.class, "Ch"+trackIndex).getValue());
     trackInput = int(cp5.get(Numberbox.class, "In"+trackIndex).getValue());
     trackOutput = int(cp5.get(Numberbox.class, "Out"+trackIndex).getValue());
   }
@@ -87,11 +90,11 @@ public enum TrackType {
   }
 }
 
-void TrackCreate(int tValue, int tRangeMin, int tRangeMax, int tInput, int tOutput, int tIndex, String tName, int tColor)
+void TrackCreate(int tValue, int tRangeMin, int tRangeMax, int tChannel, int tInput, int tOutput, int tIndex, String tName, int tColor)
 {
   int trackIndex = tracks.size();
 
-  tracks.add(new Track(tValue, tRangeMin, tRangeMax, tInput, tOutput, tIndex, tName, tColor));
+  tracks.add(new Track(tValue, tRangeMin, tRangeMax, tChannel, tInput, tOutput, tIndex, tName, tColor));
 
   UIAddTrack(trackIndex);
 }
@@ -105,10 +108,10 @@ public void TrackCreateDefault()
     int tIndex = tracks.size();
     if (tIndex == 0)
     {
-      TrackCreate(0, 0, 255, tIndex, tIndex, tIndex, "Track 0", 1);
+      TrackCreate(0, 0, 255, 0, tIndex, tIndex, tIndex, "Track 0", 1);
     } else
     {
-      TrackCreate(0, 0, 255, tracks.get(tIndex-1).trackInput + 1, tracks.get(tIndex-1).trackOutput + 1, tIndex, "Track " + tIndex, tracks.get(tIndex-1).trackColor);
+      TrackCreate(0, 0, 255, tracks.get(tIndex-1).trackChannel, tracks.get(tIndex-1).trackInput + 1, tracks.get(tIndex-1).trackOutput + 1, tIndex, "Track " + tIndex, tracks.get(tIndex-1).trackColor);
     }
   } else {
     println("Max tracks reached: " + dmxChannels);
@@ -122,6 +125,7 @@ public void TrackRemove(int tIndex)
 
   g.getController("Inspect"+tIndex).remove();
   g.getController("Slider"+tIndex).remove();
+  g.getController("Ch"+tIndex).remove();
   g.getController("In"+tIndex).remove();
   g.getController("Out"+tIndex).remove();
   g.getController("Mute"+tIndex).remove();
@@ -212,13 +216,47 @@ public void TrackColor(int tIndex, int tColor)
  }
  */
 
+IntList TrackFindAllByCC(int tChannel, int tInput)
+{
+  IntList indexes = new IntList();
+  for (int i = 0; i < tracks.size(); i++)
+  {
+    Track tCurrent = tracks.get(i);
+    tCurrent.trackUpdate();
+    if (tCurrent.trackChannel == tChannel)
+    {
+      if (tCurrent.trackInput == tInput)
+      {
+        indexes.append(i);
+      }
+    }
+  }
+  return indexes;
+}
 
-//find all tracks with the same trackInput and return them as an IntList
-IntList TrackFindAll(int tInput)
+//find all tracks with the same trackChannel and return them as an IntList
+IntList TrackFindAllByChannel(int tChannel)
 {
 
   IntList indexes = new IntList();
   for (int i = 0; i < tracks.size(); i++)
+  {
+    tracks.get(i).trackUpdate();
+    //tracks.get(i).trackIndex = i;
+    if (tracks.get(i).trackChannel == tChannel)
+    {
+      indexes.append(i);
+    }
+  }
+  return indexes;
+}
+
+//find all tracks with the same trackInput and return them as an IntList
+IntList TrackFindAllByInput(int tInput, IntList tracksInChannel)
+{
+
+  IntList indexes = new IntList();
+  for (int i = 0; i < tracksInChannel.size(); i++)
   {
     tracks.get(i).trackUpdate();
     tracks.get(i).trackIndex = i;

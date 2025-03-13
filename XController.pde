@@ -11,7 +11,7 @@ int dmxChannels = 512;
 
 
 //XController
-String xcVersion = "0.5";
+String xcVersion = "0.6";
 String xcWelcome = "Welcome to XController (v " + xcVersion + ") by Oriol Colomer Delgado - @ics_de | 2025";
 
 void setup()

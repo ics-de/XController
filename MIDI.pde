@@ -2,6 +2,8 @@ import themidibus.*; //Import the library
 
 MidiBus midiBus; // The MidiBus
 
+int midiChannels = 16;
+
 ArrayList<MidiInOut> midiInList = new ArrayList<MidiInOut>();
 ArrayList<MidiInOut> midiOutList = new ArrayList<MidiInOut>();
 
@@ -69,8 +71,25 @@ void MidiControllerChange(int channel, int number, int value)
     value = round(map(value, 0, 127, 0, 255));
   }
 
+  /* [LEGACY]
   //int trackIndex = TrackFind(number);
-  IntList trackIndexes = TrackFindAll(number);      //get all tracks with their In set to the CC number
+   IntList tracksInChannel = TrackFindAllByChannel(channel);
+   //println(tracksInChannel);
+   IntList trackIndexes = TrackFindAllByInput(number, tracksInChannel);      //get all tracks with their In set to the CC number
+   if (trackIndexes.size() > 0)
+   {
+   for (int i = 0; i < trackIndexes.size(); i++)   //foreach track with the same In, assign and send this same value
+   {
+   tracks.get(trackIndexes.get(i)).trackReceive(value);
+   tracks.get(trackIndexes.get(i)).trackSend(true);
+   }
+   } else
+   {
+   //println("Track not found");
+   //ConsolePrint("Track " + " not found.");
+   }
+   */
+  IntList trackIndexes = TrackFindAllByCC(channel, number);      //get all tracks with this channel and input
   if (trackIndexes.size() > 0)
   {
     for (int i = 0; i < trackIndexes.size(); i++)   //foreach track with the same In, assign and send this same value
@@ -78,10 +97,6 @@ void MidiControllerChange(int channel, int number, int value)
       tracks.get(trackIndexes.get(i)).trackReceive(value);
       tracks.get(trackIndexes.get(i)).trackSend(true);
     }
-  } else
-  {
-    println("Track not found");
-    //ConsolePrint("Track " + " not found.");
   }
 }
 

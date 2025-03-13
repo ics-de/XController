@@ -19,6 +19,7 @@ int groupHeightPos;
 
 int settingsHeight = 20;
 int settingWidthSize = trackWidth-padding*2;
+int settingsHeightPos = sliderHeight + 2*padding;
 
 int buttonSmallSize = 20;
 
@@ -52,21 +53,6 @@ void UIInspect(int trackIndex) {
   currentTrackInspected = trackIndex;
   Track currentTrack = tracks.get(currentTrackInspected);
   cp5.get(Textfield.class, "InspectorName").setText(tracks.get(currentTrackInspected).trackName);
-  /*
-  inspectorText.setText(
-   "trackIndex: " + currentTrack.trackIndex + "\n" +
-   "trackName: " + currentTrack.trackName + "\n" +
-   "trackColor: " + currentTrack.trackColor + "\n" +
-   "trackValue: " + currentTrack.trackValue + "\n" +
-   "trackRangeMin: " + currentTrack.trackRangeMin + "\n" +
-   "trackRangeMax: " + currentTrack.trackRangeMax + "\n" +
-   "trackInput: " + currentTrack.trackInput + "\n" +
-   "trackOutput: " + currentTrack.trackOutput + "\n" +
-   "trackValue: " + currentTrack.trackValue + "\n" +
-   "isMuted: " + currentTrack.isMuted + "\n" +
-   "isSmoothed: " + currentTrack.isSmoothed + "\n" +
-   "useAudio: " + currentTrack.useAudio + "\n"
-   );*/
 }
 
 
@@ -79,7 +65,7 @@ void UISetup()
   int inspectorHeightPos = height-consoleHeight-inspectorHeight+groupLabelHeight;
   int inspectorHeightSize = inspectorHeight-groupLabelHeight;
 
-  font = createFont("arial",fontSize);
+  font = createFont("arial", fontSize);
 
   //Inspector
   inspector = cp5.addGroup("Inspector")
@@ -91,15 +77,6 @@ void UISetup()
     .setFont(font)
     ;
 
-  /*
-  inspectorText = cp5.addTextarea("InspectorText")
-   .setPosition(0, inspectorHeightPos)
-   .setSize(width, inspectorHeightSize)
-   .setLineHeight(14)
-   .setColor(GetPalette(4))
-   .setText("")
-   ;
-   */
   UISetUpInspector();
 
   //Console
@@ -171,9 +148,19 @@ void UISetup()
     ;
   UISetUpDropdownList(uiMidiInList);
 
+  cp5.addToggle("MidiDebug")
+    .setValue(false)
+    .setPosition(width/2 + addressWidth+ 2*padding, padding)
+    .setSize(buttonSmallSize, buttonSmallSize)
+    .setColor(paletteButton)
+    .setCaptionLabel("D")
+    .setFont(font)
+    .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
+    ;
+
   //isReceivingMidi
   UIDrawIsReceivingMidi();
-
+  
 
   //saving/loading patches
   cp5.addTextfield("SaveLoadPatch")
@@ -315,6 +302,7 @@ void UIAddTrack(int trackIndex)
     //.setColor(paletteButton)
     .setCaptionLabel("")
     .setGroup(trackGroup)
+    .bringToFront()
     .addCallback(new CallbackListener() {
     public void controlEvent(CallbackEvent event) {
       if (event.getAction() == ControlP5.ACTION_RELEASE) {
@@ -346,19 +334,51 @@ void UIAddTrack(int trackIndex)
   )
   ;
 
-  int settingsHeightPos = sliderHeight + 2*padding;
+  String settingsLabelCh = "Ch ";
   String settingsLabelIn = "In ";
   String settingsLabelOut = "Out ";
+  settingsHeightPos = sliderHeight + 2*padding;
 
-  if (trackWidth <= 60)
+  if (trackWidth <= 69 && trackWidth >= 60)
   {
+    settingsLabelCh = "C ";
+    settingsLabelIn = "I ";
+    settingsLabelOut = "O ";
+  } else if (trackWidth <= 60)
+  {
+    settingsLabelCh = "";
     settingsLabelIn = "";
     settingsLabelOut = "";
   }
 
   //SETTINGS
+  cp5.addNumberbox("Ch" + trackIndex)
+    .setPosition(padding, getSettingsPos(0))
+    .setSize(settingWidthSize, settingsHeight)
+    .setValue(currentTrack.trackChannel)
+    .setRange(0, midiChannels)
+    .setDecimalPrecision(0)
+    .setDirection(Controller.HORIZONTAL)
+    .setScrollSensitivity(1)
+    .setMultiplier(0.125f)
+    .setCaptionLabel(settingsLabelCh)
+    .setGroup(trackGroup)
+    .setFont(font)
+    .addCallback(new CallbackListener() {
+    public void controlEvent(CallbackEvent event) {
+      if (event.getAction() == ControlP5.ACTION_RELEASE || event.getAction() == ControlP5.ACTION_RELEASE_OUTSIDE) {
+        UIUpdateInOutValues(false);
+      }
+    }
+  }
+  )
+
+  .getCaptionLabel().align(ControlP5.RIGHT, ControlP5.CENTER)
+    //.onChange(tracks.get(trackIndex).trackUpdate())
+    ;
+
   cp5.addNumberbox("In" + trackIndex)
-    .setPosition(padding, settingsHeightPos+padding)
+    .setPosition(padding, getSettingsPos(1))
     .setSize(settingWidthSize, settingsHeight)
     .setValue(currentTrack.trackInput)
     .setRange(0, universeSize)
@@ -383,7 +403,7 @@ void UIAddTrack(int trackIndex)
     ;
 
   cp5.addNumberbox("Out" + trackIndex)
-    .setPosition(padding, settingsHeightPos+settingsHeight+2*padding)
+    .setPosition(padding, getSettingsPos(2))
     .setSize(settingWidthSize, settingsHeight)
     .setValue(currentTrack.trackOutput)
     .setRange(0, universeSize)
@@ -409,7 +429,7 @@ void UIAddTrack(int trackIndex)
 
   cp5.addToggle("Mute" + trackIndex)
     .setValue(false)
-    .setPosition(padding, settingsHeightPos+2*settingsHeight+3*padding)
+    .setPosition(padding, getSettingsPos(3))
     .setSize(settingWidthSize/2, settingsHeight)
     //.setColor(paletteButton)
     .setCaptionLabel("M")
@@ -429,7 +449,7 @@ void UIAddTrack(int trackIndex)
 
   cp5.addToggle("Solo" + trackIndex)
     .setValue(false)
-    .setPosition(padding+settingWidthSize/2, settingsHeightPos+2*settingsHeight+3*padding)
+    .setPosition(padding+settingWidthSize/2, getSettingsPos(3))
     .setSize(settingWidthSize/2, settingsHeight)
     //.setColor(paletteButton)
     .setCaptionLabel("S")
@@ -449,7 +469,7 @@ void UIAddTrack(int trackIndex)
 
   cp5.addToggle("Smooth" + trackIndex)
     .setValue(false)
-    .setPosition(padding, settingsHeightPos+3*settingsHeight+4*padding)
+    .setPosition(padding, getSettingsPos(4))
     .setSize(settingWidthSize, settingsHeight)
     //.setColor(paletteButton)
     .setCaptionLabel("Smooth")
@@ -469,7 +489,7 @@ void UIAddTrack(int trackIndex)
 
   cp5.addToggle("Audio" + trackIndex)
     .setValue(false)
-    .setPosition(padding, settingsHeightPos+4*settingsHeight+5*padding)
+    .setPosition(padding, getSettingsPos(5))
     .setSize(settingWidthSize, settingsHeight)
     //.setColor(paletteButton)
     .setCaptionLabel("Audio")
@@ -507,6 +527,13 @@ void UIAddTrack(int trackIndex)
   UIInspect(trackIndex);
 }
 
+int getSettingsPos(int index) {
+
+  int pos = 0;
+  pos = settingsHeightPos+(index*settingsHeight)+((index+1)*padding);
+  return pos;
+}
+
 void UISetUpInspector() {
   int insNameSetSize = topBarHeight-padding*3;
 
@@ -533,9 +560,34 @@ void UISetUpInspector() {
 
   UISetUpInspectorColors();
 
+  cp5.addNumberbox("InspectorCh")
+    .setGroup(inspector)
+    .setPosition(getSettingsInsepctorPos(0), padding+3*insNameSetSize)
+    .setSize(settingWidthSize, settingsHeight)
+    .setValue(0)
+    .setRange(0, midiChannels)
+    .setDecimalPrecision(0)
+    .setDirection(Controller.HORIZONTAL)
+    .setScrollSensitivity(1)
+    .setMultiplier(0.125f)
+    .setCaptionLabel("Ch")
+    .setFont(font)
+    .addCallback(new CallbackListener() {
+    public void controlEvent(CallbackEvent event) {
+      if (event.getAction() == ControlP5.ACTION_RELEASE || event.getAction() == ControlP5.ACTION_RELEASE_OUTSIDE) {
+        UIUpdateInOutValues(true);
+      }
+    }
+  }
+  )
+
+  .getCaptionLabel().align(ControlP5.RIGHT, ControlP5.CENTER)
+    ;
+
+
   cp5.addNumberbox("InspectorIn")
     .setGroup(inspector)
-    .setPosition(padding, padding+3*insNameSetSize)
+    .setPosition(getSettingsInsepctorPos(1), padding+3*insNameSetSize)
     .setSize(settingWidthSize, settingsHeight)
     .setValue(0)
     .setRange(0, universeSize)
@@ -559,7 +611,7 @@ void UISetUpInspector() {
 
   cp5.addNumberbox("InspectorOut")
     .setGroup(inspector)
-    .setPosition(2*padding+settingWidthSize, padding+3*insNameSetSize)
+    .setPosition(getSettingsInsepctorPos(2), padding+3*insNameSetSize)
     .setSize(settingWidthSize, settingsHeight)
     .setValue(0)
     .setRange(0, universeSize)
@@ -582,11 +634,20 @@ void UISetUpInspector() {
     ;
 }
 
+int getSettingsInsepctorPos(int index) {
+
+  int pos = 0;
+  pos = (index+1)*padding+(settingWidthSize*index);
+  return pos;
+}
+
 void UIUpdateInOutValues(boolean fromInspector) {
   if (fromInspector) {
+    cp5.get(Numberbox.class, "Ch"+currentTrackInspected).setValue(cp5.get(Numberbox.class, "InspectorCh").getValue());
     cp5.get(Numberbox.class, "In"+currentTrackInspected).setValue(cp5.get(Numberbox.class, "InspectorIn").getValue());
     cp5.get(Numberbox.class, "Out"+currentTrackInspected).setValue(cp5.get(Numberbox.class, "InspectorOut").getValue());
   } else {
+    cp5.get(Numberbox.class, "InspectorCh").setValue(cp5.get(Numberbox.class, "Ch"+currentTrackInspected).getValue());
     cp5.get(Numberbox.class, "InspectorIn").setValue(cp5.get(Numberbox.class, "In"+currentTrackInspected).getValue());
     cp5.get(Numberbox.class, "InspectorOut").setValue(cp5.get(Numberbox.class, "Out"+currentTrackInspected).getValue());
   }
@@ -682,6 +743,11 @@ void MidiInputs() {
   midiCreateBus();
 }
 
+void MidiDebug(){
+  if(!isSetUp){
+  debugMidi = !debugMidi;
+  }
+}
 
 void Web() {
   if (!isSetUp)

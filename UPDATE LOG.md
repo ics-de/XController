@@ -7,6 +7,14 @@
 * take MIDI CC channels into account
 * move MidiInputs DropdownList to a ScrollableList
 
+
+## v 0.6 | 13/03/2025
+* added trackChannel functionality (update, send...)
+* added MIDI Channel numberbox
+* made the settings positioning easier to control through functions
+* cleaned up method for finding tracks (now by channel and number)
+* added a toogle button to debug MIDI info
+
 ## v 0.5.1 | 07/03/2025
 * changed font to Arial for better legibility
 * fixed names not being updated when loading patches
